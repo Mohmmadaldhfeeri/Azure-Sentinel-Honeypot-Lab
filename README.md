@@ -23,6 +23,22 @@ A Windows Virtual Machine was intentionally exposed to the internet to attract m
 * Kusto Query Language (KQL)
 * Remote Desktop Protocol (RDP)
 
+## Lab Architecture
+
+![Azure Resources](Resource Group (RG-SOC-LAB).jpeg)
+
+## Honeypot Configuration
+
+![Firewall Disabled](Firewall.jpeg)
+
+## Network Security Group (NSG)
+
+![NSG Rules](NSG.jpeg)
+
+## Attack Visualization
+
+![Attack Map](Attack Map.jpeg)
+
 
 ## Sample KQL Query
 
