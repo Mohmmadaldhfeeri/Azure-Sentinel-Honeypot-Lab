@@ -8,11 +8,8 @@ A Windows Virtual Machine was intentionally exposed to the internet to attract m
 
 ## Project Objectives
 
-* Deploy a vulnerable Windows VM (Honeypot)
-* Capture real-world failed login attempts (RDP attacks)
-* Analyze attacker behavior using KQL
-* Visualize global attack sources using an attack map
-* Simulate real SOC (Security Operations Center) workflow
+The objective of this project is to simulate a real-world cyber attack environment by deploying a vulnerable Windows virtual machine in Microsoft Azure. The system is intentionally exposed to the internet to attract malicious login attempts. These attacks are then captured, analyzed, and visualized using Microsoft Sentinel and KQL, allowing for better understanding of attacker behavior and demonstrating a basic SOC (Security Operations Center) workflow.
+
 
 ## 🛠️ Technologies Used
 
