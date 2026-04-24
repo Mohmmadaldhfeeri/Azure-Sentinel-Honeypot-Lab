@@ -2,9 +2,12 @@
 
 ## Overview
 
-This project demonstrates a fully implemented cloud-based honeypot using Microsoft Azure and Microsoft Sentinel to detect and analyze real-world cyber attacks.
+This project demonstrates the design and implementation of a cloud-based honeypot using Microsoft Azure and Microsoft Sentinel to monitor and analyze real-world cyber attacks.
 
-A Windows Virtual Machine was intentionally exposed to the internet to attract malicious activity. Security logs were collected, analyzed, and visualized using Microsoft Sentinel and KQL.
+A Windows virtual machine is intentionally exposed to the internet to attract malicious activity, particularly brute-force login attempts. Security events are collected through Log Analytics and analyzed using Kusto Query Language (KQL) within Microsoft Sentinel.
+
+The project simulates a basic Security Operations Center (SOC) environment, showcasing how security analysts detect, investigate, and visualize threats using modern SIEM tools.
+
 
 ## Project Objectives
 
