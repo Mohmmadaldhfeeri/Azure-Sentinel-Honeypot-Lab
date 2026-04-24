@@ -24,7 +24,6 @@ A Windows Virtual Machine was intentionally exposed to the internet to attract m
 * Remote Desktop Protocol (RDP)
 
 
-
 ## Sample KQL Query
 
 ```kql id="x1kql9"
@@ -57,6 +56,3 @@ SecurityEvent
 ## Author
 
 Mohmmad Aldhfeeri
-ة
-
-ةخا
