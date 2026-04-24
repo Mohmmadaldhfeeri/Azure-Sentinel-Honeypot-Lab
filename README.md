@@ -37,7 +37,7 @@ A Windows Virtual Machine was intentionally exposed to the internet to attract m
 
 ## Attack Visualization
 
-![Attack Map](Attack Map.jpeg)
+![Attack Map](Attack%20Map.jpeg)
 
 
 ## Sample KQL Query
