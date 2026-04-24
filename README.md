@@ -14,14 +14,15 @@ A Windows Virtual Machine was intentionally exposed to the internet to attract m
 * Visualize global attack sources using an attack map
 * Simulate real SOC (Security Operations Center) workflow
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-* Microsoft Azure
-* Microsoft Sentinel (SIEM)
-* Log Analytics Workspace
-* Windows Virtual Machine
-* Kusto Query Language (KQL)
-* Remote Desktop Protocol (RDP)
+* ☁️ Microsoft Azure
+* 🛡️ Microsoft Sentinel (SIEM)
+* 📊 Log Analytics Workspace
+* 💻 Windows Virtual Machine
+* 🔍 Kusto Query Language (KQL)
+* 🌐 Remote Desktop Protocol (RDP)
+
 
 ## Lab Architecture
 
@@ -64,6 +65,11 @@ SecurityEvent
 * Cyber threat detection
 * Cloud security fundamentals
 * SOC analyst workflow
+
+## 📌 Conclusion
+
+This lab demonstrates how a simple exposed system can attract real-world cyber attacks and how security tools like Microsoft Sentinel can be used to detect, analyze, and respond to threats effectively.
+
 
 ## Status
 
