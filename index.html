@@ -1,2753 +1,1272 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abdulmalek Alghamdi — The Analyst</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@300;400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mohammad Aldhafeeri // Cybersecurity Portfolio</title>
+<meta name="description" content="Cybersecurity fresh graduate — SOC, Threat Detection, Incident Response. KFMC co-op · MITRE ATT&CK · ELK/Wazuh." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #f4f1ea;
-    --bg-dark: #0d0c0a;
-    --ink: #1a1815;
-    --ink-soft: #3d3a35;
-    --ink-muted: #6b6862;
-    --paper: #ebe6dc;
-    --paper-dark: #1f1d19;
-    --accent: #c8451d;
-    --gold: #b8934d;
-    --line: rgba(26, 24, 21, 0.12);
-    --line-strong: rgba(26, 24, 21, 0.35);
+    --bg: #0a0b0d;
+    --bg-2: #0f1114;
+    --panel: #111418;
+    --line: #1c2026;
+    --line-2: #262b32;
+    --ink: #e7ebee;
+    --ink-dim: #8a939c;
+    --ink-mute: #5a626b;
+    --accent: #ff3b30;       /* alert red — the defender's pulse */
+    --accent-2: #00ffa3;     /* ok green */
+    --amber: #ffb020;        /* warn */
+    --blue: #6ea8fe;
+    --grid: rgba(255,255,255,0.025);
+
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --serif: 'Fraunces', Georgia, serif;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    line-height: 1.5;
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.55;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    cursor: none;
-  }
-  body.ar { font-family: 'Tajawal', sans-serif; }
-  body.ar .italic, body.ar .arabic-serif { font-family: 'Amiri', serif; }
-  @media (hover: none) { body { cursor: auto; } }
-
-  /* CURSOR */
-  .cursor {
-    position: fixed; width: 8px; height: 8px;
-    background: var(--accent); border-radius: 50%;
-    pointer-events: none; z-index: 10000;
-    transition: width 0.3s, height 0.3s, background 0.3s;
-    transform: translate(-50%, -50%); mix-blend-mode: difference;
-  }
-  .cursor-follower {
-    position: fixed; width: 36px; height: 36px;
-    border: 1px solid var(--ink); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
-    transform: translate(-50%, -50%);
-  }
-  body.cursor-hover .cursor { width: 0; height: 0; }
-  body.cursor-hover .cursor-follower {
-    width: 64px; height: 64px;
-    background: var(--accent); border-color: var(--accent);
-    mix-blend-mode: difference;
-  }
-  @media (hover: none) { .cursor, .cursor-follower { display: none; } }
-
-  /* LOADER */
-  .loader {
-    position: fixed; inset: 0;
-    background: var(--ink); z-index: 11000;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column;
-    transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
-  }
-  .loader.done { transform: translateY(-100%); }
-  .loader-quote {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--bg); opacity: 0.4;
-    font-size: clamp(14px, 1.4vw, 18px);
-    text-align: center; max-width: 480px;
-    margin-bottom: 40px; padding: 0 20px;
-    animation: fadeInSlow 1.5s ease-out 0.5s both;
-  }
-  body.ar .loader-quote { font-family: 'Amiri', serif; font-size: clamp(15px, 1.5vw, 20px); }
-  .loader-text {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: clamp(48px, 8vw, 120px);
-    color: var(--bg); letter-spacing: -0.03em; overflow: hidden;
-  }
-  body.ar .loader-text { font-family: 'Amiri', serif; font-weight: 700; }
-  .loader-text span {
-    display: inline-block;
-    animation: loaderUp 1.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-  }
-  .loader-bar {
-    width: min(400px, 70vw); height: 1px;
-    background: rgba(244, 241, 234, 0.2);
-    margin-top: 40px; position: relative; overflow: hidden;
-  }
-  .loader-bar::after {
-    content: ''; position: absolute; left: 0; top: 0; height: 100%;
-    background: var(--accent);
-    animation: loaderBar 2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-  }
-  .loader-count {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    color: var(--bg); opacity: 0.5;
-    margin-top: 16px; letter-spacing: 0.15em;
-  }
-  @keyframes loaderUp {
-    0% { transform: translateY(100%); opacity: 0; }
-    40%, 80% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-100%); opacity: 0; }
-  }
-  @keyframes loaderBar { 0% { width: 0; } 100% { width: 100%; } }
-  @keyframes fadeInSlow { from { opacity: 0; } to { opacity: 0.4; } }
-
-  .scroll-progress {
-    position: fixed; top: 0; left: 0;
-    height: 2px; background: var(--accent);
-    z-index: 200; width: 0; transition: width 0.1s linear;
+    background-image:
+      radial-gradient(circle at 18% -10%, rgba(255,59,48,0.10), transparent 45%),
+      radial-gradient(circle at 88% 15%, rgba(0,255,163,0.05), transparent 40%),
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: auto, auto, 48px 48px, 48px 48px;
   }
 
+  /* scanline subtle CRT atmosphere */
   body::before {
-    content: ''; position: fixed; inset: 0;
-    pointer-events: none; z-index: 9990; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index: 3;
+    mix-blend-mode: overlay;
   }
 
-  .container { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+  /* noise layer */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    z-index: 2;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
 
-  /* NAV */
-  nav {
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* ====================== TOPBAR ====================== */
+  .topbar {
     position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100; padding: 24px 40px;
-    display: flex; justify-content: space-between; align-items: center;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    background: rgba(244, 241, 234, 0.6);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s;
-  }
-  nav.scrolled { border-bottom-color: var(--line); }
-  .nav-logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 24px; font-style: italic;
-    letter-spacing: -0.02em; text-decoration: none; color: var(--ink);
-  }
-  .nav-links {
-    display: flex; gap: 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-  body.ar .nav-links {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .nav-links a {
-    color: var(--ink); text-decoration: none;
-    position: relative; padding: 4px 0; transition: color 0.3s;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute; left: 0; bottom: 0;
-    width: 100%; height: 1px; background: var(--accent);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.3s;
-  }
-  body.ar .nav-links a::after { transform-origin: right; }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .lang-switch {
-    display: flex; gap: 2px; padding: 4px;
-    border: 1px solid var(--line-strong); border-radius: 100px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
-  }
-  .lang-btn {
-    padding: 6px 14px; border-radius: 100px;
-    background: transparent; border: none;
-    color: var(--ink); cursor: none;
-    transition: all 0.3s ease;
-    font-family: inherit; font-size: inherit; font-weight: 500;
-  }
-  .lang-btn.active { background: var(--ink); color: var(--bg); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: center;
-    position: relative; padding: 140px 0 80px;
-  }
-  .hero-meta {
-    display: flex; justify-content: space-between;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--ink-muted); margin-bottom: 80px;
-  }
-  body.ar .hero-meta {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0; text-transform: none;
-  }
-  .hero-meta span { display: flex; align-items: center; gap: 8px; }
-  .hero-meta .pulse::before {
-    content: ''; width: 6px; height: 6px;
-    background: var(--accent); border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  .hero-title {
-    font-size: clamp(56px, 11vw, 200px);
-    font-weight: 300; line-height: 0.92;
-    letter-spacing: -0.04em; margin-bottom: 40px;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  body.ar .hero-title {
-    font-family: 'Tajawal', sans-serif; font-weight: 700;
-    letter-spacing: -0.02em; line-height: 1;
-  }
-  .hero-title .italic {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-weight: 400;
-  }
-  body.ar .hero-title .italic {
-    font-family: 'Amiri', serif; font-style: italic; font-weight: 700;
-  }
-  .hero-title .line { display: block; overflow: hidden; }
-  .hero-title .line > span {
-    display: inline-block;
-    animation: slideUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(var(--i) * 0.15s + 1.5s);
-  }
-  .hero-bottom {
-    display: grid; grid-template-columns: 1.2fr 1fr;
-    gap: 80px; margin-top: 60px; padding-top: 32px;
-    border-top: 1px solid var(--line);
-    animation: fadeIn 1s ease-out 2.5s both;
-  }
-  .hero-description {
-    font-size: 22px; line-height: 1.55;
-    color: var(--ink-soft); max-width: 580px; font-weight: 400;
-  }
-  body.ar .hero-description { font-size: 20px; line-height: 1.8; }
-  .hero-description em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .hero-description em {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .hero-location {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--ink-muted);
-    display: flex; flex-direction: column; gap: 6px; align-self: end;
-  }
-  body.ar .hero-location {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0; text-transform: none;
-  }
-  .hero-location strong { color: var(--ink); font-weight: 500; }
-  .hero-scroll-hint {
-    position: absolute; bottom: 40px; left: 50%;
-    transform: translateX(-50%);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
-    color: var(--ink-muted);
-    animation: fadeIn 1s ease-out 3s both, bounce 2s infinite 3.5s;
-  }
-  body.ar .hero-scroll-hint {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0; text-transform: none;
-  }
-
-  /* MANIFESTO */
-  .manifesto {
-    background: var(--ink); color: var(--bg);
-    padding: 180px 0; position: relative; overflow: hidden;
-  }
-  .manifesto::before {
-    content: '✦'; position: absolute;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 600px; color: rgba(200, 69, 29, 0.05);
-    line-height: 1; pointer-events: none; font-family: serif;
-  }
-  .manifesto-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.3em; color: var(--accent);
-    text-align: center; margin-bottom: 48px; position: relative; z-index: 2;
-  }
-  body.ar .manifesto-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0.1em; text-transform: none; font-weight: 500;
-  }
-  .manifesto-text {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: clamp(32px, 5vw, 68px);
-    line-height: 1.25; text-align: center;
-    max-width: 1100px; margin: 0 auto;
-    letter-spacing: -0.02em;
-    position: relative; z-index: 2;
-  }
-  body.ar .manifesto-text {
-    font-family: 'Amiri', serif; font-weight: 400; line-height: 1.5;
-  }
-  .manifesto-text .accent { color: var(--accent); font-style: italic; }
-  .manifesto-text .strike { position: relative; opacity: 0.55; }
-  .manifesto-text .strike::after {
-    content: ''; position: absolute;
-    top: 55%; left: -6px; right: -6px; height: 3px;
-    background: var(--accent); transform: rotate(-2deg);
-  }
-  .manifesto-sig {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.2em; color: rgba(244, 241, 234, 0.5);
-    text-align: center; margin-top: 64px; position: relative; z-index: 2;
-  }
-  body.ar .manifesto-sig {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0; text-transform: none;
-  }
-
-  /* MARQUEE */
-  .marquee {
-    background: var(--bg); color: var(--ink);
-    padding: 28px 0; overflow: hidden; white-space: nowrap;
-    border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line);
-  }
-  .marquee-track {
-    display: inline-flex; gap: 60px;
-    animation: scroll 40s linear infinite;
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 42px;
-  }
-  body.ar .marquee-track {
-    font-family: 'Amiri', serif; font-weight: 400;
-    font-size: 36px; animation-direction: reverse;
-  }
-  .marquee-track span { display: flex; align-items: center; gap: 60px; }
-  .marquee-track span::after {
-    content: '✦'; font-size: 24px;
-    color: var(--accent); font-style: normal;
-  }
-  @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* METRICS */
-  .metrics { padding: 140px 0; background: var(--bg); }
-  .metrics-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.3em; color: var(--accent);
-    text-align: center; margin-bottom: 32px;
-  }
-  body.ar .metrics-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0.1em; text-transform: none; font-weight: 500;
-  }
-  .metrics-title {
-    font-size: clamp(40px, 6vw, 96px);
-    font-weight: 300; line-height: 1.05;
-    letter-spacing: -0.03em; text-align: center;
-    margin-bottom: 100px; max-width: 980px;
-    margin-left: auto; margin-right: auto;
-  }
-  body.ar .metrics-title {
-    font-family: 'Tajawal', sans-serif; font-weight: 700; line-height: 1.2;
-  }
-  .metrics-title .italic {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .metrics-title .italic {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .metrics-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--line);
-    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-  }
-  .metric {
-    background: var(--bg); padding: 56px 36px;
-    text-align: center; transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative; overflow: hidden;
-  }
-  .metric::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--accent);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s;
-  }
-  body[dir="rtl"] .metric::before { transform-origin: right; }
-  .metric:hover { background: var(--paper); }
-  .metric:hover::before { transform: scaleX(1); }
-  .metric-number {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: clamp(64px, 8vw, 120px);
-    line-height: 1; color: var(--ink);
-    letter-spacing: -0.03em; margin-bottom: 16px;
-    display: flex; justify-content: center; align-items: baseline; gap: 4px;
-  }
-  .metric-suffix { font-size: 0.4em; color: var(--accent); font-style: italic; }
-  .metric-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--ink-muted);
-    line-height: 1.5;
-  }
-  body.ar .metric-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .metrics-grid-2 {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  /* SECTION */
-  .section { padding: 140px 0; position: relative; }
-  .section-header {
-    display: grid; grid-template-columns: 1fr 3fr;
-    gap: 60px; margin-bottom: 80px;
-    padding-bottom: 40px; border-bottom: 1px solid var(--line);
-  }
-  .section-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--ink-muted);
-  }
-  body.ar .section-number {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .section-title {
-    font-size: clamp(40px, 5.5vw, 84px);
-    font-weight: 300; line-height: 1; letter-spacing: -0.03em;
-  }
-  body.ar .section-title {
-    font-family: 'Tajawal', sans-serif; font-weight: 700; line-height: 1.15;
-  }
-  .section-title .italic { font-family: 'Instrument Serif', serif; font-style: italic; }
-  body.ar .section-title .italic {
-    font-family: 'Amiri', serif; font-style: italic;
-    font-weight: 700; color: var(--accent);
-  }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid; grid-template-columns: 1.1fr 1fr;
-    gap: 80px; align-items: start;
-  }
-  .about-text { font-size: 22px; line-height: 1.65; color: var(--ink-soft); }
-  body.ar .about-text { font-size: 20px; line-height: 1.9; }
-  .about-text p + p { margin-top: 24px; }
-  .about-text em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .about-text em {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .about-identity {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    padding: 40px 32px; position: sticky; top: 100px;
-  }
-  .about-identity-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
-    color: var(--accent); margin-bottom: 20px;
-  }
-  body.ar .about-identity-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .identity-row {
-    padding: 18px 0; border-bottom: 1px solid var(--line);
-    display: flex; justify-content: space-between; align-items: baseline;
-    gap: 16px;
-  }
-  .identity-row:last-child { border-bottom: none; }
-  .identity-key {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--ink-muted);
-    flex-shrink: 0;
-  }
-  body.ar .identity-key {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0; text-transform: none;
-  }
-  .identity-val {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 20px;
-    color: var(--ink); text-align: right;
-  }
-  body.ar .identity-val {
-    font-family: 'Amiri', serif; font-weight: 700; text-align: left;
-  }
-  .identity-val .accent { color: var(--accent); }
-
-  /* EDUCATION */
-  .education {
-    background: var(--ink); color: var(--bg);
-    padding: 80px; display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; align-items: center;
-    position: relative; overflow: hidden;
-  }
-  .education::before {
-    content: '2026'; position: absolute;
-    top: -50px; right: -20px;
-    font-family: 'Instrument Serif', serif;
-    font-size: 420px; font-style: italic;
-    color: rgba(244, 241, 234, 0.04);
-    line-height: 1; pointer-events: none;
-  }
-  body[dir="rtl"] .education::before { right: auto; left: -20px; }
-  .edu-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.2em; color: var(--accent); margin-bottom: 20px;
-  }
-  body.ar .edu-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .edu-degree {
-    font-size: 52px; font-weight: 300; line-height: 1.1;
-    letter-spacing: -0.02em; margin-bottom: 16px;
-  }
-  body.ar .edu-degree { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .edu-degree .italic { font-family: 'Instrument Serif', serif; font-style: italic; }
-  .edu-school { font-size: 20px; opacity: 0.7; margin-bottom: 32px; }
-  .edu-highlights { list-style: none; position: relative; z-index: 2; }
-  .edu-highlights li {
-    padding: 18px 0;
-    border-bottom: 1px solid rgba(244, 241, 234, 0.1);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .edu-highlights li:last-child { border-bottom: none; }
-  .edu-highlights .label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em; opacity: 0.6;
-  }
-  body.ar .edu-highlights .label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0; text-transform: none;
-  }
-  .edu-highlights .value {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 26px; color: var(--accent);
-  }
-  body.ar .edu-highlights .value { font-family: 'Amiri', serif; font-weight: 700; }
-
-  /* JOURNEY — clean single-column vertical timeline */
-  .journey-section { background: var(--paper); }
-  .journey {
-    max-width: 900px; margin: 0 auto;
-    padding: 20px 0; position: relative;
-  }
-  .journey-row {
-    display: grid; grid-template-columns: 180px 1fr;
-    gap: 64px; padding: 56px 0;
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-  }
-  .journey-year {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 88px;
-    line-height: 0.95; color: var(--accent);
-    letter-spacing: -0.03em;
-    align-self: start;
-  }
-  .journey-content h3 {
-    font-size: 28px; font-weight: 400;
-    letter-spacing: -0.02em; line-height: 1.25;
-    margin-bottom: 14px; color: var(--ink);
-  }
-  body.ar .journey-content h3 {
-    font-family: 'Tajawal', sans-serif; font-weight: 700;
-  }
-  .journey-content h3 .italic {
-    font-family: 'Instrument Serif', serif; font-style: italic; color: var(--accent);
-  }
-  body.ar .journey-content h3 .italic {
-    font-family: 'Amiri', serif; font-weight: 700;
-  }
-  .journey-tag {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.2em; color: var(--accent);
-    margin-bottom: 14px; font-weight: 500;
-    padding: 4px 10px;
-    border: 1px solid var(--accent);
-  }
-  body.ar .journey-tag {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .journey-desc {
-    font-size: 16px; line-height: 1.7;
-    color: var(--ink-soft); max-width: 620px;
-  }
-  body.ar .journey-desc { font-size: 16px; line-height: 1.9; }
-  .journey-desc em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .journey-desc em {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-
-  /* EXPERIENCE */
-  .experience-item {
-    display: grid; grid-template-columns: 200px 1fr auto;
-    gap: 40px; padding: 56px 0;
-    border-bottom: 1px solid var(--line);
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-  }
-  .experience-item:first-child { border-top: 1px solid var(--line); }
-  .experience-item::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; width: 0; height: 100%;
-    background: var(--paper);
-    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: -1;
-  }
-  .experience-item:hover::before { width: 100%; }
-  .experience-item:hover { padding-left: 32px; padding-right: 32px; }
-  .exp-date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--ink-muted); padding-top: 8px;
-  }
-  body.ar .exp-date {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .exp-content h3 {
-    font-size: 34px; font-weight: 400;
-    letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.2;
-  }
-  body.ar .exp-content h3 { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .exp-content h3 .company {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .exp-content h3 .company {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .exp-desc {
-    font-size: 17px; color: var(--ink-soft);
-    line-height: 1.65; margin-top: 16px; max-width: 680px;
-  }
-  body.ar .exp-desc { font-size: 17px; line-height: 1.9; }
-  .exp-desc em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .exp-desc em {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .exp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-  .exp-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
-    padding: 5px 11px; border: 1px solid var(--line-strong);
-    color: var(--ink-soft); transition: all 0.3s;
-  }
-  body.ar .exp-tag {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .exp-tag:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .exp-arrow {
-    font-family: 'Instrument Serif', serif;
-    font-size: 36px; color: var(--ink-muted);
-    transition: transform 0.4s, color 0.3s; align-self: center;
-  }
-  body[dir="rtl"] .exp-arrow { transform: scaleX(-1); }
-  .experience-item:hover .exp-arrow {
-    transform: translateX(12px); color: var(--accent);
-  }
-  body[dir="rtl"] .experience-item:hover .exp-arrow {
-    transform: translateX(-12px) scaleX(-1);
-  }
-
-  /* CAPSTONE */
-  .capstone-card {
-    background: var(--bg-dark); color: var(--bg);
-    padding: 100px; position: relative; overflow: hidden;
-    border: 1px solid var(--ink);
-  }
-  .capstone-card::before {
-    content: 'HUMEX'; position: absolute;
-    bottom: -60px; right: -60px;
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: 320px; color: rgba(200, 69, 29, 0.08);
-    line-height: 1; letter-spacing: -0.04em;
-    pointer-events: none; font-weight: 400;
-  }
-  body[dir="rtl"] .capstone-card::before { right: auto; left: -60px; }
-  .capstone-badge-row {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    margin-bottom: 48px; position: relative; z-index: 2;
-  }
-  .capstone-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
-    padding: 7px 14px; border: 1px solid rgba(244, 241, 234, 0.25);
-    color: rgba(244, 241, 234, 0.85);
-  }
-  body.ar .capstone-tag {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .capstone-tag-accent {
-    background: var(--accent); border-color: var(--accent);
-    color: var(--bg); font-weight: 500;
-  }
-  .capstone-title {
-    font-size: clamp(72px, 14vw, 220px);
-    font-weight: 300; line-height: 0.92;
-    letter-spacing: -0.05em; margin-bottom: 24px;
-    position: relative; z-index: 2;
-  }
-  body.ar .capstone-title { font-family: 'Tajawal', sans-serif; font-weight: 900; }
-  .capstone-subtitle {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: clamp(24px, 2.6vw, 36px);
-    margin-bottom: 56px; opacity: 0.8;
-    max-width: 780px; line-height: 1.4;
-    position: relative; z-index: 2;
-  }
-  body.ar .capstone-subtitle { font-family: 'Amiri', serif; font-weight: 400; }
-  .capstone-subtitle em { color: var(--accent); font-style: italic; }
-  .capstone-body {
-    max-width: 760px; font-size: 18px;
-    line-height: 1.75; opacity: 0.9;
-    margin-bottom: 64px; position: relative; z-index: 2;
-  }
-  body.ar .capstone-body {
-    font-family: 'Tajawal', sans-serif; font-size: 18px; line-height: 1.9;
-  }
-  .capstone-body p + p { margin-top: 20px; }
-  .capstone-body em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .capstone-body em { font-family: 'Amiri', serif; font-weight: 700; }
-  .capstone-meta-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr);
-    gap: 1px; background: rgba(244, 241, 234, 0.15);
-    border: 1px solid rgba(244, 241, 234, 0.15);
-    position: relative; z-index: 2;
-  }
-  .capstone-meta-item {
-    background: var(--bg-dark); padding: 28px 32px;
-    transition: background 0.3s;
-  }
-  .capstone-meta-item:hover { background: var(--paper-dark); }
-  .capstone-meta-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
-    opacity: 0.5; margin-bottom: 10px;
-  }
-  body.ar .capstone-meta-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0; text-transform: none;
-  }
-  .capstone-meta-value { font-size: 16px; line-height: 1.5; }
-
-  /* UNIVERSITY PROJECTS */
-  .university-intro {
-    font-size: 20px; line-height: 1.6; color: var(--ink-soft);
-    max-width: 780px; margin-bottom: 64px;
-  }
-  body.ar .university-intro { font-size: 19px; line-height: 1.9; }
-  .university-intro em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .university-intro em { font-family: 'Amiri', serif; font-weight: 700; }
-  .uni-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .uni-card {
-    padding: 40px 36px; background: var(--paper);
-    border: 1px solid var(--line);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative; overflow: hidden;
-  }
-  .uni-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; width: 3px; height: 100%;
-    background: var(--accent);
-    transform: scaleY(0); transform-origin: top;
-    transition: transform 0.4s ease;
-  }
-  body[dir="rtl"] .uni-card::before { left: auto; right: 0; }
-  .uni-card:hover::before { transform: scaleY(1); }
-  .uni-card:hover {
-    transform: translateY(-6px); background: var(--bg);
-    box-shadow: 0 30px 50px -20px rgba(26, 24, 21, 0.18);
-  }
-  .uni-header {
-    display: flex; justify-content: space-between;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--ink-muted); margin-bottom: 24px;
-    padding-bottom: 18px; border-bottom: 1px solid var(--line);
-  }
-  body.ar .uni-header {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .uni-course { color: var(--accent); font-weight: 600; }
-  .uni-title {
-    font-size: 26px; font-weight: 400;
-    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 8px;
-  }
-  body.ar .uni-title { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .uni-title .italic {
-    font-family: 'Instrument Serif', serif; font-style: italic; color: var(--ink-muted);
-  }
-  body.ar .uni-title .italic { font-family: 'Amiri', serif; font-weight: 400; }
-  .uni-course-name {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: 15px; color: var(--ink-muted); margin-bottom: 18px;
-  }
-  body.ar .uni-course-name { font-family: 'Amiri', serif; font-size: 16px; }
-  .uni-desc {
-    font-size: 15px; line-height: 1.65;
-    color: var(--ink-soft); margin-bottom: 22px;
-  }
-  body.ar .uni-desc { line-height: 1.9; }
-  .uni-desc em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .uni-desc em { font-family: 'Amiri', serif; font-weight: 700; }
-  .uni-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .uni-tags .exp-tag { padding: 4px 10px; font-size: 9px; }
-  body.ar .uni-tags .exp-tag { font-size: 11px; }
-
-  /* HACKATHONS */
-  .hackathons-list { display: flex; flex-direction: column; }
-  .hack-item {
-    display: grid; grid-template-columns: 160px 1fr;
-    gap: 48px; padding: 56px 0;
-    border-bottom: 1px solid var(--line);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-  }
-  .hack-item:first-child { border-top: 1px solid var(--line); }
-  .hack-item::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; width: 0; height: 100%;
-    background: var(--paper);
-    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: -1;
-  }
-  .hack-item:hover::before { width: 100%; }
-  .hack-item:hover { padding-left: 32px; padding-right: 32px; }
-  .hack-year {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: 72px; line-height: 1;
-    color: var(--accent); letter-spacing: -0.02em;
-  }
-  .hack-result { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .hack-medal { font-size: 22px; }
-  .hack-place {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--accent); font-weight: 500;
-  }
-  body.ar .hack-place {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .hack-name {
-    font-size: 30px; font-weight: 400;
-    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 14px;
-  }
-  body.ar .hack-name { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .hack-name .italic {
-    font-family: 'Instrument Serif', serif; font-style: italic; color: var(--ink-muted);
-  }
-  body.ar .hack-name .italic { font-family: 'Amiri', serif; }
-  .hack-desc {
-    font-size: 17px; color: var(--ink-soft);
-    line-height: 1.65; max-width: 720px; margin-bottom: 20px;
-  }
-  body.ar .hack-desc { line-height: 1.9; }
-  .hack-desc em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .hack-desc em { font-family: 'Amiri', serif; font-weight: 700; }
-  .hack-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-
-  /* ═══════════ SKILLS — THE ARSENAL ═══════════ */
-  .arsenal-intro {
-    text-align: center; max-width: 720px;
-    margin: -20px auto 80px;
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 24px;
-    color: var(--ink-soft); line-height: 1.5;
-  }
-  body.ar .arsenal-intro {
-    font-family: 'Amiri', serif; font-size: 22px; line-height: 1.8;
-  }
-  .arsenal-intro .accent { color: var(--accent); }
-
-  .arsenal {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 24px; position: relative;
-  }
-
-  .arsenal-column {
-    background: var(--ink);
-    color: var(--bg);
-    padding: 48px 40px 44px;
-    position: relative; overflow: hidden;
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .arsenal-column:hover {
-    transform: translateY(-8px);
-  }
-
-  /* Glowing corner accent */
-  .arsenal-column::before {
-    content: ''; position: absolute;
-    top: 0; right: 0;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle at top right, rgba(200, 69, 29, 0.35) 0%, transparent 65%);
-    opacity: 0; transition: opacity 0.5s ease;
-    pointer-events: none;
-  }
-  .arsenal-column:hover::before { opacity: 1; }
-
-  /* Pulsing number background */
-  .arsenal-column::after {
-    content: attr(data-index);
-    position: absolute;
-    bottom: -40px; right: -20px;
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: 280px; line-height: 1;
-    color: rgba(244, 241, 234, 0.04);
-    letter-spacing: -0.05em;
-    pointer-events: none;
-    transition: color 0.5s ease, transform 0.6s ease;
-  }
-  body[dir="rtl"] .arsenal-column::after { right: auto; left: -20px; }
-  .arsenal-column:hover::after {
-    color: rgba(200, 69, 29, 0.12);
-    transform: scale(1.08);
-  }
-
-  .arsenal-header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding-bottom: 20px; margin-bottom: 28px;
-    border-bottom: 1px solid rgba(244, 241, 234, 0.15);
-    position: relative; z-index: 2;
-  }
-  .arsenal-kicker {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; text-transform: uppercase;
-    letter-spacing: 0.3em; color: var(--accent);
-    margin-bottom: 12px; font-weight: 500;
-  }
-  body.ar .arsenal-kicker {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0.1em;
-    text-transform: none; font-weight: 700;
-  }
-  .arsenal-title {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 36px;
-    line-height: 1.05; letter-spacing: -0.02em;
-    color: var(--bg);
-  }
-  body.ar .arsenal-title {
-    font-family: 'Amiri', serif; font-weight: 700;
-    font-size: 32px;
-  }
-  .arsenal-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: rgba(244, 241, 234, 0.4);
-    letter-spacing: 0.15em; text-align: right;
-    padding-top: 6px; flex-shrink: 0;
-  }
-  body[dir="rtl"] .arsenal-count { text-align: left; }
-
-  .arsenal-list {
-    list-style: none; position: relative; z-index: 2;
-  }
-  .arsenal-list li {
-    padding: 16px 0;
-    display: grid; grid-template-columns: 28px 1fr auto;
-    gap: 14px; align-items: center;
-    border-bottom: 1px solid rgba(244, 241, 234, 0.08);
-    color: rgba(244, 241, 234, 0.85);
-    font-size: 15px;
-    position: relative;
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  body.ar .arsenal-list li {
-    font-family: 'Tajawal', sans-serif; font-size: 16px;
-  }
-  .arsenal-list li:last-child { border-bottom: none; }
-  .arsenal-list li:hover {
-    color: var(--bg);
-    padding-left: 10px;
-  }
-  body[dir="rtl"] .arsenal-list li:hover {
-    padding-left: 0; padding-right: 10px;
-  }
-
-  .arsenal-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--accent);
+    z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    font-family: var(--mono);
+    font-size: 11px;
     letter-spacing: 0.1em;
-    font-weight: 500;
-    opacity: 0.6;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .arsenal-list li:hover .arsenal-num {
-    opacity: 1; transform: scale(1.15);
-  }
-
-  .arsenal-skill {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    letter-spacing: -0.005em;
-  }
-  body.ar .arsenal-skill {
-    font-family: 'Tajawal', sans-serif; font-weight: 500;
-  }
-
-  /* Skill level bar */
-  .arsenal-level {
-    display: flex; gap: 3px; align-items: center;
-    flex-shrink: 0;
-  }
-  .arsenal-bar {
-    width: 18px; height: 4px;
-    background: rgba(244, 241, 234, 0.12);
-    border-radius: 1px;
-    transition: background 0.4s ease;
-  }
-  .arsenal-bar.filled {
-    background: rgba(244, 241, 234, 0.4);
-  }
-  .arsenal-list li:hover .arsenal-bar.filled {
-    background: var(--accent);
-  }
-  .arsenal-list li:hover .arsenal-bar {
-    background: rgba(200, 69, 29, 0.2);
-  }
-
-  /* Footer callout */
-  .arsenal-footer {
-    margin-top: 28px; padding-top: 20px;
-    border-top: 1px solid rgba(244, 241, 234, 0.15);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: rgba(244, 241, 234, 0.35);
-    display: flex; justify-content: space-between; align-items: center;
-    position: relative; z-index: 2;
+    backdrop-filter: blur(12px);
+    background: rgba(10,11,13,0.65);
+    border-bottom: 1px solid var(--line);
   }
-  body.ar .arsenal-footer {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0;
-    text-transform: none;
-  }
-  .arsenal-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 2s infinite;
-  }
+  .topbar .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .topbar .brand .sq { width: 10px; height: 10px; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .topbar .brand strong { font-weight: 800; letter-spacing: 0.15em; }
+  .topbar .brand span { color: var(--ink-mute); }
 
-  /* CERTIFICATIONS */
-  .cert-tier-label {
-    text-align: center;
-    margin-bottom: 40px;
-    padding-top: 20px;
+  .nav { display: flex; gap: 22px; }
+  .nav a {
+    color: var(--ink-dim);
+    transition: color .2s, transform .2s;
+    position: relative;
   }
-  .cert-tier-label-2 {
-    margin-top: 100px;
-    padding-top: 60px;
-    border-top: 1px solid var(--line);
-  }
-  .cert-tier-kicker {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.3em; color: var(--accent);
-    padding: 6px 16px;
-    border: 1px solid var(--accent);
-    margin-bottom: 20px; font-weight: 500;
-  }
-  body.ar .cert-tier-kicker {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0.05em;
-    text-transform: none; font-weight: 700;
-  }
-  .cert-tier-title {
-    font-size: clamp(28px, 3.5vw, 48px);
-    font-weight: 300; line-height: 1.1;
-    letter-spacing: -0.02em; margin-bottom: 14px;
-  }
-  body.ar .cert-tier-title {
-    font-family: 'Tajawal', sans-serif; font-weight: 700; line-height: 1.3;
-  }
-  .cert-tier-title .italic {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .cert-tier-title .italic {
-    font-family: 'Amiri', serif; font-weight: 700; color: var(--accent);
-  }
-  .cert-tier-desc {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-size: 18px;
-    color: var(--ink-muted);
-  }
-  body.ar .cert-tier-desc {
-    font-family: 'Amiri', serif; font-size: 18px;
-  }
+  .nav a:hover { color: var(--accent-2); }
+  .nav a::before { content: '['; color: var(--ink-mute); margin-right: 2px; opacity: 0; transition: opacity .2s; }
+  .nav a::after  { content: ']'; color: var(--ink-mute); margin-left: 2px;  opacity: 0; transition: opacity .2s; }
+  .nav a:hover::before, .nav a:hover::after { opacity: 1; }
 
-  .certs-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  .status {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--accent-2);
   }
-  .certs-grid-pro {
-    margin-bottom: 20px;
-  }
-  .cert-card {
-    padding: 36px 32px; background: var(--paper);
-    border: 1px solid var(--line);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative; overflow: hidden;
-  }
-  .cert-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--accent);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s ease;
-  }
-  body[dir="rtl"] .cert-card::before { transform-origin: right; }
-  .cert-card:hover::before { transform: scaleX(1); }
-  .cert-card:hover {
-    transform: translateY(-6px); background: var(--bg);
-    box-shadow: 0 20px 40px -15px rgba(26, 24, 21, 0.18);
-  }
-
-  /* Pro cards: elevated with gold accent */
-  .cert-card-pro {
-    background: var(--ink);
-    color: var(--bg);
-    border-color: var(--ink);
-    padding: 44px 36px 40px;
-  }
-  .cert-card-pro::before { background: var(--gold); }
-  .cert-card-pro::after {
-    content: ''; position: absolute;
-    top: 0; right: 0;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle at top right, rgba(184, 147, 77, 0.25) 0%, transparent 65%);
-    opacity: 0; transition: opacity 0.5s ease;
-    pointer-events: none;
-  }
-  .cert-card-pro:hover {
-    background: var(--bg-dark);
-  }
-  .cert-card-pro:hover::after { opacity: 1; }
-
-  .cert-badge {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; font-weight: 600;
-    letter-spacing: 0.25em;
-    padding: 4px 10px;
-    background: var(--gold);
-    color: var(--ink);
-    margin-bottom: 20px;
-  }
-  body.ar .cert-badge {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0.05em; font-weight: 700;
-  }
-  .cert-card-pro .cert-issuer { color: var(--gold); }
-  .cert-card-pro .cert-name { color: var(--bg); }
-  .cert-card-pro .cert-name .italic { color: var(--bg); }
-  .cert-card-pro .cert-date {
-    color: rgba(244, 241, 234, 0.5);
-    border-top-color: rgba(244, 241, 234, 0.15);
-  }
-
-  .cert-issuer {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--accent);
-    margin-bottom: 14px; font-weight: 500;
-  }
-  body.ar .cert-issuer {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .cert-name {
-    font-size: 22px; font-weight: 400; line-height: 1.3;
-    letter-spacing: -0.01em; margin-bottom: 20px;
-  }
-  body.ar .cert-name { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .cert-name .italic { font-family: 'Instrument Serif', serif; font-style: italic; }
-  body.ar .cert-name .italic { font-family: 'Amiri', serif; }
-  .cert-date {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    color: var(--ink-muted); padding-top: 16px;
-    border-top: 1px solid var(--line);
-  }
-  body.ar .cert-date { font-family: 'Tajawal', sans-serif; font-size: 13px; }
-
-  /* RECOGNITION */
-  .press-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  }
-  .press-card {
-    padding: 40px 32px; background: var(--paper);
-    border: 1px solid var(--line);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative; overflow: hidden;
-  }
-  .press-card::after {
-    content: '✦'; position: absolute;
-    top: 20px; right: 24px; font-size: 24px; color: var(--accent);
-    transition: transform 0.4s, opacity 0.4s; opacity: 0.4;
-  }
-  body[dir="rtl"] .press-card::after { right: auto; left: 24px; }
-  .press-card:hover {
-    transform: translateY(-6px); background: var(--bg);
-    box-shadow: 0 30px 50px -20px rgba(26, 24, 21, 0.18);
-    border-color: var(--accent);
-  }
-  .press-card:hover::after {
-    transform: rotate(90deg) scale(1.2); opacity: 1;
-  }
-  .press-source {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.2em; color: var(--accent);
-    margin-bottom: 24px; font-weight: 500;
-  }
-  body.ar .press-source {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .press-quote {
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: 22px; line-height: 1.4;
-    color: var(--ink); margin-bottom: 24px;
-    letter-spacing: -0.01em;
-  }
-  body.ar .press-quote {
-    font-family: 'Amiri', serif; font-size: 22px;
-    line-height: 1.6; font-weight: 400;
-  }
-  .press-quote .accent { color: var(--accent); }
-  .press-detail {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; color: var(--ink-muted);
-    padding-top: 16px; border-top: 1px solid var(--line);
-  }
-  body.ar .press-detail { font-family: 'Tajawal', sans-serif; font-size: 13px; }
-
-  /* REQUEST */
-  .request-intro {
-    font-size: 20px; line-height: 1.65; color: var(--ink-soft);
-    max-width: 760px; margin-bottom: 56px;
-  }
-  body.ar .request-intro { font-size: 19px; line-height: 1.9; }
-  .request-intro em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; color: var(--accent);
-  }
-  body.ar .request-intro em { font-family: 'Amiri', serif; font-weight: 700; }
-  .request-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
-  }
-  .request-card {
-    display: block; padding: 40px 36px;
-    background: var(--paper); border: 1px solid var(--line);
-    text-decoration: none; color: inherit;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative; overflow: hidden; cursor: none;
-  }
-  .request-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--ink);
-    transform: translateY(100%);
-    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
-    z-index: 0;
-  }
-  .request-card:hover::before { transform: translateY(0); }
-  .request-card:hover { color: var(--bg); border-color: var(--ink); }
-  .request-card > * { position: relative; z-index: 1; }
-  .request-meta {
-    display: flex; justify-content: space-between;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.15em; margin-bottom: 28px;
-    color: var(--ink-muted); transition: color 0.4s;
-  }
-  .request-card:hover .request-meta { color: rgba(244, 241, 234, 0.5); }
-  body.ar .request-meta {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 12px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .request-type { color: var(--accent); font-weight: 500; }
-  .request-title {
-    font-size: 26px; font-weight: 400;
-    letter-spacing: -0.02em; line-height: 1.2;
-    margin-bottom: 12px; transition: color 0.4s;
-  }
-  body.ar .request-title { font-family: 'Tajawal', sans-serif; font-weight: 700; }
-  .request-title .italic {
-    font-family: 'Instrument Serif', serif; font-style: italic; opacity: 0.7;
-  }
-  body.ar .request-title .italic { font-family: 'Amiri', serif; }
-  .request-desc {
-    font-size: 15px; line-height: 1.6;
-    color: var(--ink-soft); margin-bottom: 32px;
-    transition: color 0.4s;
-  }
-  .request-card:hover .request-desc { color: rgba(244, 241, 234, 0.8); }
-  body.ar .request-desc { font-size: 16px; line-height: 1.85; }
-  .request-cta {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 20px; border-top: 1px solid var(--line);
-    transition: border-color 0.4s;
-  }
-  .request-card:hover .request-cta {
-    border-color: rgba(244, 241, 234, 0.25);
-  }
-  .request-cta-text {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--accent);
-    font-weight: 500; transition: letter-spacing 0.3s;
-  }
-  body.ar .request-cta-text {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0;
-    text-transform: none; font-weight: 700;
-  }
-  .request-card:hover .request-cta-text {
-    letter-spacing: 0.25em;
-  }
-  body.ar .request-card:hover .request-cta-text { letter-spacing: 0.08em; }
-  .request-arrow {
-    font-family: 'Instrument Serif', serif;
-    font-size: 32px; color: var(--accent); transition: transform 0.4s;
-  }
-  body[dir="rtl"] .request-arrow { transform: scaleX(-1); }
-  .request-card:hover .request-arrow { transform: translateX(8px); }
-  body[dir="rtl"] .request-card:hover .request-arrow {
-    transform: translateX(-8px) scaleX(-1);
-  }
-
-  /* CONTACT */
-  .contact {
-    padding: 180px 0 120px; text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .contact::before {
-    content: ''; position: absolute;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(200, 69, 29, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .contact-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
-    color: var(--ink-muted); margin-bottom: 32px;
-    position: relative; z-index: 2;
-  }
-  body.ar .contact-label {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .contact-title {
-    font-size: clamp(56px, 10vw, 160px);
-    font-weight: 300; line-height: 1;
-    letter-spacing: -0.04em; margin-bottom: 60px;
-    position: relative; z-index: 2;
-  }
-  body.ar .contact-title {
-    font-family: 'Tajawal', sans-serif; font-weight: 700; line-height: 1.15;
-  }
-  .contact-title .italic {
-    font-family: 'Instrument Serif', serif; font-style: italic; color: var(--accent);
-  }
-  body.ar .contact-title .italic { font-family: 'Amiri', serif; font-weight: 700; }
-  .contact-email {
-    display: inline-block; font-size: 32px;
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    color: var(--ink); text-decoration: none;
-    padding: 20px 48px; border: 1px solid var(--ink);
-    border-radius: 100px;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    margin-bottom: 60px; position: relative; z-index: 2;
-  }
-  .contact-email:hover {
-    background: var(--ink); color: var(--bg);
-    letter-spacing: 0.02em;
-  }
-  .contact-links {
-    display: flex; justify-content: center;
-    flex-wrap: wrap; gap: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
-    position: relative; z-index: 2;
-  }
-  body.ar .contact-links {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 14px; letter-spacing: 0;
-    text-transform: none; font-weight: 500;
-  }
-  .contact-links a {
-    color: var(--ink-soft); text-decoration: none;
-    position: relative; padding-bottom: 4px; transition: color 0.3s;
-  }
-  .contact-links a::after {
-    content: ''; position: absolute;
-    left: 0; bottom: 0; width: 100%; height: 1px;
-    background: var(--accent); transform: scaleX(0);
-    transform-origin: left; transition: transform 0.3s;
-  }
-  .contact-links a:hover { color: var(--accent); }
-  .contact-links a:hover::after { transform: scaleX(1); }
-
-  footer {
-    padding: 48px 40px; border-top: 1px solid var(--line);
-    display: flex; justify-content: space-between;
-    flex-wrap: wrap; gap: 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--ink-muted);
-  }
-  body.ar footer {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 13px; letter-spacing: 0; text-transform: none;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideUp {
-    from { transform: translateY(110%); }
-    to { transform: translateY(0); }
+  .status .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 10px var(--accent-2);
+    animation: pulse 1.8s infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.3); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
+    50% { opacity: 0.4; transform: scale(0.7); }
   }
 
+  /* ====================== LAYOUT ====================== */
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  section { padding: 110px 0; position: relative; }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 1px; background: var(--accent);
+  }
+
+  h2.section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(38px, 5vw, 64px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 12px;
+    font-variation-settings: "SOFT" 40;
+  }
+  h2.section-title .mono {
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 0.55em;
+    color: var(--accent);
+    letter-spacing: 0;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+
+  .section-sub {
+    color: var(--ink-dim);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+  .section-sub::before { content: '// '; color: var(--ink-mute); }
+
+  /* ====================== HERO ====================== */
+  .hero {
+    min-height: 100vh;
+    padding-top: 120px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .hero-tag span { color: var(--accent-2); }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(56px, 9vw, 124px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin-bottom: 28px;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+    font-variation-settings: "SOFT" 100;
+  }
+  .hero h1 .slash {
+    font-family: var(--mono);
+    font-weight: 300;
+    color: var(--ink-mute);
+    font-size: 0.45em;
+    vertical-align: middle;
+    margin: 0 0.15em;
+  }
+
+  .hero p.lead {
+    font-size: 19px;
+    color: var(--ink-dim);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 44px;
+  }
+  .hero p.lead strong { color: var(--ink); font-weight: 500; }
+
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 14px 24px;
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    letter-spacing: 0.05em;
+    transition: all .2s;
+    cursor: pointer;
+    background: transparent;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn:hover {
+    border-color: var(--accent-2);
+    color: var(--accent-2);
+    background: rgba(0,255,163,0.04);
+    transform: translateY(-2px);
+  }
+  .btn.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover {
+    background: transparent;
+    color: var(--accent);
+  }
+  .btn .arrow { font-size: 14px; transition: transform .2s; }
+  .btn:hover .arrow { transform: translateX(4px); }
+
+  /* hero terminal panel */
+  .terminal {
+    background: linear-gradient(180deg, var(--panel), var(--bg-2));
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    box-shadow:
+      0 0 0 1px rgba(255,59,48,0.08),
+      0 40px 80px -20px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.03);
+    overflow: hidden;
+  }
+  .terminal-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,0.015);
+  }
+  .terminal-head .dots { display: flex; gap: 6px; }
+  .terminal-head .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
+  .terminal-head .dots span:first-child { background: var(--accent); }
+  .terminal-head .dots span:nth-child(2) { background: var(--amber); }
+  .terminal-head .dots span:nth-child(3) { background: var(--accent-2); }
+  .terminal-head .title {
+    color: var(--ink-mute);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    margin-left: 8px;
+  }
+  .terminal-body { padding: 20px 22px; line-height: 1.85; color: var(--ink-dim); }
+  .terminal-body .cmd { color: var(--ink); }
+  .terminal-body .cmd::before { content: '$ '; color: var(--accent); }
+  .terminal-body .out { color: var(--ink-dim); padding-left: 14px; }
+  .terminal-body .ok { color: var(--accent-2); }
+  .terminal-body .key { color: var(--blue); }
+  .terminal-body .str { color: var(--amber); }
+  .terminal-body .comment { color: var(--ink-mute); }
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent-2);
+    vertical-align: middle;
+    animation: blink 1s steps(2, end) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ====================== ABOUT ====================== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .about-body {
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    max-width: 640px;
+  }
+  .about-body p + p { margin-top: 20px; }
+  .about-body strong { color: var(--ink); font-weight: 500; }
+  .about-body em {
+    font-style: normal;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.85em;
+    padding: 2px 6px;
+    background: rgba(255,59,48,0.08);
+    border: 1px solid rgba(255,59,48,0.2);
+    border-radius: 3px;
+  }
+
+  .info-card {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 28px;
+  }
+  .info-card + .info-card { margin-top: 16px; }
+  .info-card .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .info-card .label::before {
+    content: ''; width: 6px; height: 6px; background: var(--accent); display: inline-block;
+  }
+  .info-card .val { font-size: 18px; color: var(--ink); line-height: 1.5; }
+  .info-card .val .sub { display: block; color: var(--ink-mute); font-size: 13px; font-family: var(--mono); margin-top: 4px; }
+
+  /* ====================== EXPERIENCE ====================== */
+  .xp-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 40px;
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+    transition: background .3s;
+    position: relative;
+  }
+  .xp-item:hover { background: rgba(255,59,48,0.015); }
+  .xp-item:last-child { border-bottom: 1px solid var(--line); }
+  .xp-item:hover .xp-arrow { transform: translateX(8px); color: var(--accent); }
+
+  .xp-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+  .xp-main h3 {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -0.015em;
+    display: flex; align-items: baseline; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .xp-main h3 .xp-arrow {
+    font-family: var(--mono);
+    color: var(--ink-mute);
+    font-size: 20px;
+    transition: transform .25s, color .25s;
+  }
+  .xp-org {
+    color: var(--accent-2);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    margin-bottom: 18px;
+  }
+  .xp-desc { color: var(--ink-dim); font-size: 16px; line-height: 1.7; max-width: 680px; }
+  .xp-desc p + p { margin-top: 10px; }
+  .xp-tags { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+  }
+  .tag:hover { border-color: var(--accent-2); color: var(--accent-2); }
+
+  /* ====================== PROJECTS ====================== */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .project {
+    display: grid;
+    grid-template-columns: 80px 1fr 220px;
+    gap: 30px;
+    padding: 36px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .project:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .project::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .35s;
+  }
+  .project:hover::before { transform: scaleY(1); }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--ink-mute);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .project-num .hash { color: var(--accent); }
+
+  .project-body h3 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .project-body .ptype {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent-2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .project-body p {
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+  .project-body p strong { color: var(--ink); font-weight: 500; }
+  .project-tags { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .project-aside {
+    border-left: 1px solid var(--line);
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .project-aside .status-line {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 18px;
+  }
+  .project-aside .status-line.active { color: var(--accent); }
+  .project-aside .status-line.done { color: var(--accent-2); }
+  .project-aside .status-line.ongoing { color: var(--amber); }
+  .project-aside .status-line::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; box-shadow: 0 0 8px currentColor;
+  }
+
+  .ascii-art {
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.3;
+    color: var(--ink-mute);
+    white-space: pre;
+    opacity: 0.7;
+  }
+
+  /* ====================== SKILLS ====================== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--line);
+  }
+  .skill {
+    padding: 26px 24px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background .2s;
+    cursor: default;
+    position: relative;
+  }
+  .skill:nth-child(4n) { border-right: none; }
+  .skill:nth-last-child(-n+4) { border-bottom: none; }
+  .skill:hover { background: rgba(255,59,48,0.04); }
+  .skill:hover .skill-code { color: var(--accent); }
+
+  .skill-code {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+    transition: color .2s;
+  }
+  .skill-code::before { content: '['; }
+  .skill-code::after { content: ']'; }
+
+  .skill-title {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .skill-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+
+  /* ====================== CERTS ====================== */
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .cert {
+    padding: 26px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+    align-items: start;
+    transition: all .3s;
+  }
+  .cert:hover {
+    border-color: var(--accent-2);
+    transform: translateY(-3px);
+  }
+  .cert-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    width: 64px; height: 64px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,59,48,0.05) 0, rgba(255,59,48,0.05) 2px, transparent 2px, transparent 6px);
+  }
+  .cert-body h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .cert-body .cert-issuer {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .cert-body .cert-date {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    letter-spacing: 0.15em;
+  }
+
+  /* ====================== CONTACT ====================== */
+  .contact-wrap {
+    border: 1px solid var(--line);
+    padding: 70px 50px;
+    background:
+      radial-gradient(ellipse at center, rgba(255,59,48,0.05), transparent 70%),
+      var(--panel);
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-wrap::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,255,163,0.04), transparent 70%);
+    pointer-events: none;
+  }
+  .contact-wrap h2 {
+    font-family: var(--serif);
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    font-variation-settings: "SOFT" 40;
+  }
+  .contact-wrap h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: "SOFT" 100;
+  }
+  .contact-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 48px;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .contact-link {
+    background: var(--panel);
+    padding: 22px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    transition: background .2s;
+  }
+  .contact-link:hover { background: var(--bg-2); }
+  .contact-link .k {
+    color: var(--ink-mute);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .contact-link .v { color: var(--ink); }
+  .contact-link .arrow {
+    color: var(--accent);
+    transition: transform .2s;
+  }
+  .contact-link:hover .arrow { transform: translate(3px, -3px); }
+
+  /* ====================== FOOTER ====================== */
+  footer {
+    padding: 40px 28px 28px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.1em;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  footer .session {
+    padding: 4px 10px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-dim);
+  }
+
+  /* ====================== ANIMATIONS ====================== */
   .reveal {
-    opacity: 0; transform: translateY(50px);
-    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
   }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.in { opacity: 1; transform: none; }
 
-  /* RESPONSIVE */
+  /* stagger */
+  .reveal.d1 { transition-delay: .08s; }
+  .reveal.d2 { transition-delay: .16s; }
+  .reveal.d3 { transition-delay: .24s; }
+  .reveal.d4 { transition-delay: .32s; }
+  .reveal.d5 { transition-delay: .40s; }
+  .reveal.d6 { transition-delay: .48s; }
+
+  /* ====================== RESPONSIVE ====================== */
   @media (max-width: 900px) {
-    .container { padding: 0 24px; }
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    body { cursor: auto; }
-
-    .hero { padding: 120px 0 60px; }
-    .hero-bottom { grid-template-columns: 1fr; gap: 40px; }
-    .hero-location { align-self: start; }
-    .hero-scroll-hint { display: none; }
-
-    .manifesto { padding: 100px 0; }
-    .manifesto::before { font-size: 300px; }
-
-    .metrics { padding: 80px 0; }
-    .metrics-grid, .metrics-grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .metric { padding: 40px 20px; }
-    .metrics-title { margin-bottom: 60px; }
-
-    .section { padding: 80px 0; }
-    .section-header {
-      grid-template-columns: 1fr; gap: 20px; margin-bottom: 60px;
-    }
-
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-identity { position: relative; top: 0; }
-
-    .education {
-      padding: 48px 28px;
-      grid-template-columns: 1fr; gap: 40px;
-    }
-    .education::before { font-size: 200px; top: -20px; }
-
-    .journey-row {
-      grid-template-columns: 1fr;
-      gap: 20px; padding: 36px 0;
-    }
-    .journey-year { font-size: 60px; }
-
-    .experience-item {
-      grid-template-columns: 1fr; gap: 16px; padding: 40px 0;
-    }
-    .experience-item:hover { padding-left: 0; padding-right: 0; }
-    .exp-arrow { display: none; }
-    .exp-content h3 { font-size: 26px; }
-
-    .capstone-card { padding: 48px 28px; }
-    .capstone-meta-grid { grid-template-columns: 1fr; }
-    .capstone-card::before {
-      font-size: 140px; bottom: -30px; right: -30px;
-    }
-
-    .uni-grid { grid-template-columns: 1fr; }
-
-    .hack-item {
-      grid-template-columns: 1fr; gap: 16px; padding: 40px 0;
-    }
-    .hack-item:hover { padding-left: 0; padding-right: 0; }
-    .hack-year { font-size: 48px; }
-    .hack-name { font-size: 22px; }
-
-    .arsenal { grid-template-columns: 1fr; }
-    .arsenal-intro { font-size: 20px; margin-bottom: 40px; }
-    .arsenal-column { padding: 36px 28px; }
-    .arsenal-title { font-size: 28px; }
-    .arsenal-column::after { font-size: 180px; bottom: -20px; }
+    .topbar { padding: 12px 18px; }
+    .nav { display: none; }
+    .container { padding: 0 18px; }
+    .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 100px; min-height: auto; padding-bottom: 40px; }
+    .about-grid { grid-template-columns: 1fr; gap: 30px; }
+    .xp-item { grid-template-columns: 1fr; gap: 12px; padding: 30px 0; }
+    .project { grid-template-columns: 1fr; gap: 20px; padding: 26px; }
+    .project-aside { border-left: none; border-top: 1px solid var(--line); padding: 20px 0 0; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .skill { border-right: 1px solid var(--line) !important; }
+    .skill:nth-child(2n) { border-right: none !important; }
     .certs-grid { grid-template-columns: 1fr; }
-    .press-grid { grid-template-columns: 1fr; }
+    .contact-wrap { padding: 40px 24px; }
+    .contact-links { grid-template-columns: 1fr; }
+    section { padding: 70px 0; }
+  }
 
-    .request-grid { grid-template-columns: 1fr; }
-
-    .contact-email { font-size: 20px; padding: 14px 28px; }
-    .contact-links { gap: 20px 30px; }
-
-    footer { padding: 32px 24px; flex-direction: column; text-align: center; }
-    .marquee-track { font-size: 28px; }
+  @media (max-width: 560px) {
+    .topbar .status { display: none; }
+    .terminal-body { font-size: 11px; padding: 16px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .skill { border-right: none !important; }
+    .project-num { font-size: 40px; }
   }
 </style>
 </head>
-<body class="en">
+<body>
 
-<div class="cursor"></div>
-<div class="cursor-follower"></div>
-
-<div class="loader" id="loader">
-  <div class="loader-quote" data-en='"I don&apos;t build products. I build clarity."' data-ar="«أنا لا أبني منتجات. أبني وضوحاً.»">"I don't build products. I build clarity."</div>
-  <div class="loader-text" data-en="Abdulmalek." data-ar="عبدالملك."><span>Abdulmalek.</span></div>
-  <div class="loader-bar"></div>
-  <div class="loader-count" id="loader-count">00</div>
-</div>
-
-<div class="scroll-progress" id="scroll-progress"></div>
-
-<nav id="nav">
-  <a href="#" class="nav-logo">A.A</a>
-  <div class="nav-links">
-    <a href="#manifesto" data-en="Manifesto" data-ar="الرؤية">Manifesto</a>
-    <a href="#metrics" data-en="Numbers" data-ar="الأرقام">Numbers</a>
-    <a href="#about" data-en="About" data-ar="عن">About</a>
-    <a href="#journey" data-en="Journey" data-ar="المسيرة">Journey</a>
-    <a href="#experience" data-en="Work" data-ar="العمل">Work</a>
-    <a href="#capstone" data-en="Capstone" data-ar="التخرج">Capstone</a>
-    <a href="#projects" data-en="Projects" data-ar="المشاريع">Projects</a>
-    <a href="#recognition" data-en="Recognition" data-ar="التقدير">Recognition</a>
-    <a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a>
+<!-- ============== TOPBAR ============== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="sq"></span>
+    <strong>M.ALDHAFEERI</strong><span>/sec</span>
   </div>
-  <div class="lang-switch">
-    <button class="lang-btn active" data-lang="en">EN</button>
-    <button class="lang-btn" data-lang="ar">ع</button>
+  <nav class="nav">
+    <a href="#about">about</a>
+    <a href="#experience">experience</a>
+    <a href="#projects">projects</a>
+    <a href="#skills">skills</a>
+    <a href="#contact">contact</a>
+  </nav>
+  <div class="status">
+    <span class="dot"></span>
+    <span>available · ksa</span>
   </div>
-</nav>
+</header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-meta">
-      <span class="pulse" data-en="Available for opportunities — 2026" data-ar="مُتاحٌ للفرص — ٢٠٢٦">Available for opportunities — 2026</span>
-      <span data-en="Portfolio / vol.03" data-ar="بورتفوليو / إصدار ٣">Portfolio / vol.03</span>
-    </div>
+<main class="container">
 
-    <h1 class="hero-title">
-      <span class="line"><span style="--i:0" data-en="Abdulmalek" data-ar="عبدالملك">Abdulmalek</span></span>
-      <span class="line"><span style="--i:1" data-en="&lt;em class='italic'&gt;Alghamdi&lt;/em&gt;—" data-ar="&lt;em class='italic'&gt;الغامدي&lt;/em&gt;—"><em class="italic">Alghamdi</em>—</span></span>
-      <span class="line"><span style="--i:2" data-en="the analyst." data-ar="المحلل.">the analyst.</span></span>
-    </h1>
-
-    <div class="hero-bottom">
-      <p class="hero-description" data-en="Computer Science &amp; Engineering senior graduating <em>2nd in cohort</em>. I sit between business and engineering — translating chaos into blueprints, and blueprints into shipped products." data-ar="طالبٌ في السّنة الأخيرة من <em>علوم وهندسة الحاسب</em>، وسأتخرّج بـ<em>المرتبة الثّانية</em> على دفعتي. أجلس بين عالَمَي الأعمال والهندسة — أُترجم الفوضى إلى مُخطّطات، والمُخطّطات إلى منتجاتٍ تصل إلى المستخدم.">Computer Science &amp; Engineering senior graduating <em>2nd in cohort</em>. I sit between business and engineering — translating chaos into blueprints, and blueprints into shipped products.</p>
-      <div class="hero-location">
-        <span data-en="Based in" data-ar="مُقيمٌ في">Based in</span>
-        <strong data-en="Saudi Arabia" data-ar="المملكة العربيّة السّعوديّة">Saudi Arabia</strong>
-        <span style="margin-top: 12px;" data-en="Recent at" data-ar="آخر محطّة">Recent at</span>
-        <strong data-en="stc × Al-Rakeen" data-ar="stc × الرّكين">stc × Al-Rakeen</strong>
+  <!-- ============== HERO ============== -->
+  <section class="hero" id="home">
+    <div>
+      <div class="hero-tag reveal">
+        <span>●</span> SOC / THREAT DETECTION / INCIDENT RESPONSE
+      </div>
+      <h1 class="reveal d1">
+        Mohammad<br/>
+        Aldhafeeri<span class="slash">.</span><br/>
+        <em>// defender</em>
+      </h1>
+      <p class="lead reveal d2">
+        Cybersecurity fresh graduate from <strong>University of Hafr Al-Batin</strong>.
+        I monitor, hunt, and respond — from SOC dashboards to MITRE ATT&amp;CK chains,
+        log pipelines and honeypots.
+      </p>
+      <div class="cta-row reveal d3">
+        <a href="#projects" class="btn primary">
+          <span>&gt; view projects</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="mailto:Mohmmad.Aldhfeeri@outlook.com" class="btn">
+          <span>contact.me()</span>
+          <span class="arrow">↗</span>
+        </a>
       </div>
     </div>
 
-    <div class="hero-scroll-hint" data-en="Scroll to witness ↓" data-ar="اسحب لترى ↓">Scroll to witness ↓</div>
-  </div>
-</section>
-
-<!-- MANIFESTO -->
-<section class="manifesto" id="manifesto">
-  <div class="container">
-    <div class="manifesto-label" data-en="The Manifesto" data-ar="البيان">The Manifesto</div>
-    <div class="manifesto-text" data-en="I don&apos;t build <span class='strike'>products</span>. I build <span class='accent'>clarity</span>. <br>I don&apos;t write <span class='strike'>code</span>. I write <span class='accent'>blueprints</span>. <br>Everything else is just <span class='accent'>the follow-through</span>." data-ar="لا أبني <span class='strike'>المنتجات</span>. بل أبني <span class='accent'>الوضوح</span>. <br>لا أكتب <span class='strike'>الكود</span>. بل أكتب <span class='accent'>المُخطّطات</span>. <br>وما سوى ذلك، مُجرّد <span class='accent'>تنفيذٍ للخطّة</span>.">I don't build <span class="strike">products</span>. I build <span class="accent">clarity</span>. <br>I don't write <span class="strike">code</span>. I write <span class="accent">blueprints</span>. <br>Everything else is just <span class="accent">the follow-through</span>.</div>
-    <div class="manifesto-sig" data-en="— Abdulmalek Alghamdi, 2026" data-ar="— عبدالملك الغامدي، ٢٠٢٦">— Abdulmalek Alghamdi, 2026</div>
-  </div>
-</section>
-
-<!-- METRICS -->
-<section class="metrics reveal" id="metrics">
-  <div class="container">
-    <div class="metrics-label" data-en="By The Numbers" data-ar="بلغة الأرقام">By The Numbers</div>
-    <h2 class="metrics-title" data-en="Four years. &lt;span class='italic'&gt;One path.&lt;/span&gt; No shortcuts." data-ar="أربع سنوات. &lt;span class='italic'&gt;طريقٌ واحد.&lt;/span&gt; بلا اختصارات.">Four years. <span class="italic">One path.</span> No shortcuts.</h2>
-
-    <div class="metrics-grid">
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="2">0</span><span class="metric-suffix" data-en="nd" data-ar="">nd</span></div>
-        <div class="metric-label" data-en="Ranked in Cohort" data-ar="المرتبة على الدّفعة">Ranked in Cohort</div>
+    <div class="terminal reveal d4">
+      <div class="terminal-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="title">mohammad@soc-kfmc — ~/ops</div>
       </div>
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="8">0</span><span class="metric-suffix">+</span></div>
-        <div class="metric-label" data-en="Projects Led as Team Leader" data-ar="مشروعاً قدتُها قائداً للفريق">Projects Led as Team Leader</div>
-      </div>
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="4">0</span></div>
-        <div class="metric-label" data-en="Hackathons Conquered" data-ar="هاكاثوناتٌ خضتُها">Hackathons Conquered</div>
-      </div>
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="3">0</span></div>
-        <div class="metric-label" data-en="Professional Certifications" data-ar="شهادات احترافية معتمدة">Professional Certifications</div>
+      <div class="terminal-body">
+<div class="cmd">whoami --verbose</div>
+<div class="out">&gt; <span class="key">mohammad_aldhafeeri</span></div>
+<div class="out">&gt; role: <span class="str">cybersecurity_analyst</span></div>
+<div class="out">&gt; location: <span class="str">Riyadh, KSA</span></div>
+<div class="out">&nbsp;</div>
+<div class="cmd">cat ./stack.json</div>
+<div class="out">{</div>
+<div class="out">&nbsp;&nbsp;<span class="key">"siem"</span>: [<span class="str">"ELK"</span>, <span class="str">"Wazuh"</span>, <span class="str">"Splunk"</span>],</div>
+<div class="out">&nbsp;&nbsp;<span class="key">"offense"</span>: [<span class="str">"Metasploit"</span>, <span class="str">"Burp"</span>, <span class="str">"Nmap"</span>],</div>
+<div class="out">&nbsp;&nbsp;<span class="key">"framework"</span>: <span class="str">"MITRE ATT&amp;CK"</span>,</div>
+<div class="out">&nbsp;&nbsp;<span class="key">"compliance"</span>: [<span class="str">"NCA ECC"</span>, <span class="str">"SAMA"</span>]</div>
+<div class="out">}</div>
+<div class="out">&nbsp;</div>
+<div class="cmd">./status --check</div>
+<div class="out"><span class="ok">[OK]</span> graduated · May 2026</div>
+<div class="out"><span class="ok">[OK]</span> co-op completed · KFMC</div>
+<div class="out"><span class="ok">[OK]</span> open to opportunities</div>
+<div class="out">&nbsp;</div>
+<div class="cmd"><span class="cursor"></span></div>
       </div>
     </div>
+  </section>
 
-    <div class="metrics-grid-2">
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="6">0</span></div>
-        <div class="metric-label" data-en="Months as Analyst at stc" data-ar="أشهرٌ مُحلِّلاً في stc">Months as Analyst at stc</div>
-      </div>
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="2">0</span></div>
-        <div class="metric-label" data-en="Hackathon Top Finishes" data-ar="نتائج مُتقدِّمة في الهاكاثونات">Hackathon Top Finishes</div>
-      </div>
-      <div class="metric">
-        <div class="metric-number"><span class="count" data-target="6">0</span></div>
-        <div class="metric-label" data-en="Capstone Team Members Led" data-ar="أعضاء فريق التّخرّج بقيادتي">Capstone Team Members Led</div>
-      </div>
-      <div class="metric">
-        <div class="metric-number">∞</div>
-        <div class="metric-label" data-en="Problems Worth Solving" data-ar="مشكلاتٌ تستحقّ الحلّ">Problems Worth Solving</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="marquee">
-  <div class="marquee-track">
-    <span data-en="Systems Analysis" data-ar="تحليل الأنظمة">Systems Analysis</span>
-    <span data-en="Business Requirements" data-ar="متطلبات الأعمال">Business Requirements</span>
-    <span data-en="Product Thinking" data-ar="تفكير منتجي">Product Thinking</span>
-    <span data-en="Process Modeling" data-ar="نمذجة العمليات">Process Modeling</span>
-    <span data-en="Digital Transformation" data-ar="التحول الرقمي">Digital Transformation</span>
-    <span data-en="Systems Analysis" data-ar="تحليل الأنظمة">Systems Analysis</span>
-    <span data-en="Business Requirements" data-ar="متطلبات الأعمال">Business Requirements</span>
-    <span data-en="Product Thinking" data-ar="تفكير منتجي">Product Thinking</span>
-    <span data-en="Process Modeling" data-ar="نمذجة العمليات">Process Modeling</span>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section class="section reveal" id="about">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="01 / About" data-ar="٠١ / عن">01 / About</div>
-      <h2 class="section-title" data-en="A bridge between &lt;span class='italic'&gt;business&lt;/span&gt; &amp; &lt;span class='italic'&gt;engineering&lt;/span&gt;." data-ar="جسرٌ بين &lt;span class='italic'&gt;الأعمال&lt;/span&gt; و&lt;span class='italic'&gt;الهندسة&lt;/span&gt;.">A bridge between <span class="italic">business</span> &amp; <span class="italic">engineering</span>.</h2>
-    </div>
+  <!-- ============== ABOUT ============== -->
+  <section id="about">
+    <div class="section-tag reveal">[ 01 ]</div>
+    <h2 class="section-title reveal d1">About<span class="mono">.</span></h2>
+    <div class="section-sub reveal d2">identity · origin · mission</div>
 
     <div class="about-grid">
-      <div class="about-text" data-en="<p>I'm a final-year <em>Computer Science &amp; Engineering</em> student at the University of Hafr Al-Batin, graduating <em>2nd in my cohort</em> in 2026. But my path was never pure code.</p><p>I found my edge in the <em>in-between</em> — sitting with stakeholders, mapping their intent, and handing engineers a blueprint they can build from. At <em>stc</em> I shaped digital channel requirements and supported 10K+ users. At <em>Al-Rakeen</em> I led a website build team and turned digital concepts into shipped products.</p><p>Professionally certified in <em>CAPM</em>, <em>ITIL 4</em>, and Udacity's <em>AI Product Manager</em> Nanodegree. I write user stories, draw BPMN diagrams, argue with SQL, lead six-person teams, and ship things that matter — all in a day's work.</p>" data-ar="<p>طالبٌ في السّنة الأخيرة من تخصّص <em>علوم وهندسة الحاسب</em> بجامعة حفر الباطن، وسأتخرّج بـ<em>المرتبة الثّانية</em> على دفعتي في عام ٢٠٢٦. لكنّ طريقي لم يكن برمجةً صرفة في يوم من الأيّام.</p><p>وجدتُ موطئ قدمي في <em>المنطقة الوسطى</em> — أجلس مع أصحاب القرار، وأترجم نيّاتهم إلى خرائط عمل، ثمّ أسلّم المهندسين مُخطّطاً جاهزاً للبناء. في <em>stc</em> صغتُ متطلّبات القنوات الرّقميّة ودعمتُ أكثر من ١٠ آلاف مستخدم. وفي <em>الرّكين</em> قدتُ فريق تطوير موقع الشّركة، وحوّلتُ الأفكار الرّقميّة إلى منتجات جاهزة للإطلاق.</p><p>معتمدٌ احترافيّاً في <em>CAPM</em> و<em>ITIL 4</em>، وخرّيج برنامج <em>AI Product Manager</em> من Udacity. أكتب قصص المستخدم، وأرسم مخطّطات BPMN، وأتحاور مع قواعد البيانات، وأقود فرقاً من ستّة أعضاء، وأُسلّم ما له قيمة — كلّ ذلك في يوم عمل واحد.</p>">
-        <p>I'm a final-year <em>Computer Science &amp; Engineering</em> student at the University of Hafr Al-Batin, graduating <em>2nd in my cohort</em> in 2026. But my path was never pure code.</p>
-        <p>I found my edge in the <em>in-between</em> — sitting with stakeholders, mapping their intent, and handing engineers a blueprint they can build from. At <em>stc</em> I shaped digital channel requirements and supported 10K+ users. At <em>Al-Rakeen</em> I led a website build team and turned digital concepts into shipped products.</p>
-        <p>Professionally certified in <em>CAPM</em>, <em>ITIL 4</em>, and Udacity's <em>AI Product Manager</em> Nanodegree. I write user stories, draw BPMN diagrams, argue with SQL, lead six-person teams, and ship things that matter — all in a day's work.</p>
+      <div class="about-body reveal d2">
+        <p>
+          I'm a <strong>cybersecurity fresh graduate</strong> with hands-on experience in
+          <em>security monitoring</em>, network defense, and
+          <em>information security auditing</em>.
+        </p>
+        <p>
+          My recent chapter includes a Cybersecurity Specialist co-op at
+          <strong>King Fahad Medical City (KFMC)</strong>, where I worked across SOC
+          operations — real-time threat detection, log analysis, incident response, and
+          endpoint protection across hospital infrastructure.
+        </p>
+        <p>
+          Outside the co-op, I build lab environments: a honeypot + SIEM pipeline for my
+          capstone, offensive security exercises on TryHackMe and HackTheBox, and certifications
+          from <strong>Cisco</strong>, <strong>SDAIA</strong>, and <strong>Tuwaiq Academy</strong>.
+        </p>
+        <p>
+          I'm aiming for SOC Analyst, Threat Hunter, or Security Audit roles — with a particular
+          interest in the intersection of <em>detection engineering</em> and the Saudi regulatory
+          landscape (NCA ECC, SAMA).
+        </p>
       </div>
 
-      <div class="about-identity">
-        <div class="about-identity-label" data-en="Identity" data-ar="الهوية">Identity</div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Name" data-ar="الاسم">Name</span>
-          <span class="identity-val" data-en="Abdulmalek Alghamdi" data-ar="عبدالملك الغامدي">Abdulmalek Alghamdi</span>
-        </div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Role" data-ar="الدور">Role</span>
-          <span class="identity-val"><span class="accent" data-en="The Analyst" data-ar="المُحلِّل">The Analyst</span></span>
-        </div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Degree" data-ar="الشهادة">Degree</span>
-          <span class="identity-val" data-en="B.Sc. CS&amp;E" data-ar="بكالوريوس علوم وهندسة حاسب">B.Sc. CS&amp;E</span>
-        </div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Graduating" data-ar="التخرج">Graduating</span>
-          <span class="identity-val">2026</span>
-        </div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Rank" data-ar="المرتبة">Rank</span>
-          <span class="identity-val"><span class="accent" data-en="2nd in cohort" data-ar="الثّاني على الدّفعة">2nd in cohort</span></span>
-        </div>
-        <div class="identity-row">
-          <span class="identity-key" data-en="Licensed" data-ar="مرخّص">Licensed</span>
-          <span class="identity-val" style="font-size: 16px;">SCE #1009232</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EDUCATION -->
-<section class="section reveal">
-  <div class="container">
-    <div class="education">
       <div>
-        <div class="edu-label" data-en="02 / Education" data-ar="٠٢ / التعليم">02 / Education</div>
-        <h3 class="edu-degree" data-en="Bachelor of &lt;span class='italic'&gt;Science&lt;/span&gt;" data-ar="بكالوريوس &lt;span class='italic'&gt;العلوم&lt;/span&gt;">Bachelor of <span class="italic">Science</span></h3>
-        <div class="edu-school" data-en="Computer Science &amp; Engineering — University of Hafr Al-Batin" data-ar="علوم وهندسة حاسب — جامعة حفر الباطن">Computer Science &amp; Engineering — University of Hafr Al-Batin</div>
-      </div>
-      <ul class="edu-highlights">
-        <li>
-          <span class="label" data-en="Expected Graduation" data-ar="التخرج المتوقع">Expected Graduation</span>
-          <span class="value">2026</span>
-        </li>
-        <li>
-          <span class="label" data-en="Cohort Ranking" data-ar="المرتبة على الدفعة">Cohort Ranking</span>
-          <span class="value" data-en="2nd" data-ar="الثّاني">2nd</span>
-        </li>
-        <li>
-          <span class="label" data-en="Saudi Council of Engineers" data-ar="هيئة المهندسين السعودية">Saudi Council of Engineers</span>
-          <span class="value">#1009232</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- JOURNEY (clean single column, no dots/lines) -->
-<section class="section journey-section reveal" id="journey">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="03 / The Journey" data-ar="٠٣ / المسيرة">03 / The Journey</div>
-      <h2 class="section-title" data-en="From first line of &lt;span class='italic'&gt;code&lt;/span&gt; to final &lt;span class='italic'&gt;capstone&lt;/span&gt;." data-ar="من أوّل سطرٍ في &lt;span class='italic'&gt;الكود&lt;/span&gt; إلى آخر &lt;span class='italic'&gt;مشروع تخرّج&lt;/span&gt;.">From first line of <span class="italic">code</span> to final <span class="italic">capstone</span>.</h2>
-    </div>
-
-    <div class="journey">
-      <div class="journey-row">
-        <div class="journey-year">2023</div>
-        <div class="journey-content">
-          <div class="journey-tag" data-en="The Beginning" data-ar="البداية">The Beginning</div>
-          <h3 data-en="First &lt;span class='italic'&gt;Hackathon&lt;/span&gt; · Python · OOP" data-ar="أول &lt;span class='italic'&gt;هاكاثون&lt;/span&gt; · بايثون · OOP">First <span class="italic">Hackathon</span> · Python · OOP</h3>
-          <p class="journey-desc" data-en="Entered the 3rd Programming Hackathon at Hafr Al-Batin. Led three course projects — Student Attendance (Python), Inventory System (Java/OOP), Route Optimizer (Graphs). Found my love for building systems, not just writing code." data-ar="دخلتُ هاكاثون البرمجة الثّالث بجامعة حفر الباطن. قدتُ ثلاثة مشاريع جامعيّة — نظام حضور الطّلّاب (بايثون)، ونظام إدارة المخزون (جافا / كائنيّة التّوجّه)، ومُحسِّن المسارات (الرّسوم البيانيّة). اكتشفتُ هنا شغفي ببناء الأنظمة، لا مُجرّد كتابة الكود.">Entered the 3rd Programming Hackathon at Hafr Al-Batin. Led three course projects — Student Attendance (Python), Inventory System (Java/OOP), Route Optimizer (Graphs). Found my love for building systems, not just writing code.</p>
-        </div>
-      </div>
-
-      <div class="journey-row">
-        <div class="journey-year">2024</div>
-        <div class="journey-content">
-          <div class="journey-tag" data-en="The Ascent" data-ar="الصّعود">The Ascent</div>
-          <h3 data-en="&lt;span class='italic'&gt;2nd Place&lt;/span&gt; CyberThon · Tuwaiq Finalist" data-ar="&lt;span class='italic'&gt;المركز الثاني&lt;/span&gt; في سايبرثون · نهائيات طويق"><span class="italic">2nd Place</span> CyberThon · Tuwaiq Finalist</h3>
-          <p class="journey-desc" data-en="Won 2nd place at CyberThon with a phishing detection platform. Reached Absher Tuwaiq finals with RASHID, a GPT-powered smart gate. Trained by SDAIA, Huawei Cloud, and NCA/SITE/KAUST cybersecurity programs. Three major course projects: E-Library, Campus Network, Clinic Management System." data-ar="حصدتُ <em>المركز الثّاني</em> في سايبرثون بمنصّةٍ تكشف روابط التّصيّد. وصلتُ إلى نهائيّات أبشر طويق بمشروع <em>رشيد</em> — بوّابة ذكيّة مدعومة بـ GPT. تدرّبتُ عبر برامج سدايا، وهواوي كلاود، والهيئة الوطنيّة / سايت / كاوست للأمن السّيبرانيّ. وقدتُ ثلاثة مشاريع جامعيّة كبرى: المكتبة الإلكترونيّة، والشّبكة الجامعيّة، ونظام إدارة العيادة.">Won 2nd place at CyberThon with a phishing detection platform. Reached Absher Tuwaiq finals with RASHID, a GPT-powered smart gate. Trained by SDAIA, Huawei Cloud, and NCA/SITE/KAUST cybersecurity programs. Three major course projects: E-Library, Campus Network, Clinic Management System.</p>
-        </div>
-      </div>
-
-      <div class="journey-row">
-        <div class="journey-year">2025</div>
-        <div class="journey-content">
-          <div class="journey-tag" data-en="The Pivot" data-ar="نقطةُ التّحوّل">The Pivot</div>
-          <h3 data-en="stc Co-op · AOUN AI · &lt;span class='italic'&gt;RAG Research&lt;/span&gt;" data-ar="تدريب stc · عون AI · &lt;span class='italic'&gt;بحث RAG&lt;/span&gt;">stc Co-op · AOUN AI · <span class="italic">RAG Research</span></h3>
-          <p class="journey-desc" data-en="Seven months at Channels by stc as IT Business Analyst — supporting 10K+ users across critical systems. The year I stopped writing code and started writing blueprints. Co-built AOUN AI, qualifying to Stage 2 of the Channels hackathon. Led a 6-member research team analyzing landmark Retrieval-Augmented Generation papers. Earned Udacity's AI Product Manager Nanodegree." data-ar="سبعة أشهرٍ في قنوات stc كمحلّل أعمال تقنيّة المعلومات — دعمتُ خلالها أكثر من ١٠ آلاف مستخدم عبر أنظمةٍ حيويّة. كانت السّنة الّتي توقّفتُ فيها عن كتابة الكود، وبدأتُ أكتب المُخطّطات. ساهمتُ في بناء <em>عون AI</em>، الّذي تأهّل للمرحلة الثّانية من هاكاثون القنوات. قدتُ فريقاً بحثيّاً من ستّة أعضاء لتحليل أوراقٍ بحثيّة محوريّة في التّوليد المُعزَّز بالاسترجاع. حصلتُ على شهادة <em>AI Product Manager</em> الاحترافيّة من Udacity.">Seven months at Channels by stc as IT Business Analyst — supporting 10K+ users across critical systems. The year I stopped writing code and started writing blueprints. Co-built AOUN AI, qualifying to Stage 2 of the Channels hackathon. Led a 6-member research team analyzing landmark Retrieval-Augmented Generation papers. Earned Udacity's AI Product Manager Nanodegree.</p>
-        </div>
-      </div>
-
-      <div class="journey-row">
-        <div class="journey-year">2026</div>
-        <div class="journey-content">
-          <div class="journey-tag" data-en="The Climax" data-ar="الذّروة">The Climax</div>
-          <h3 data-en="HumeX Capstone · Al-Rakeen · &lt;span class='italic'&gt;Graduation&lt;/span&gt;" data-ar="تخرج HumeX · الركين · &lt;span class='italic'&gt;التخرج&lt;/span&gt;">HumeX Capstone · Al-Rakeen · <span class="italic">Graduation</span></h3>
-          <p class="journey-desc" data-en="Leading HumeX as Team Leader of a 6-person capstone team — an AI occupancy measurement system for smart campuses. Led a website build team at Al-Rakeen. Added two professional credentials: CAPM (PMI) and ITIL 4 (PeopleCert). Graduating 2nd in cohort." data-ar="أقود مشروع <em>HumeX</em> قائداً لفريق تخرّجٍ من ستّة أعضاء — نظامٌ ذكيّ لقياس الإشغال بالرّؤية الحاسوبيّة للحرم الجامعيّ الذّكيّ. قدتُ فريق بناء موقع الشّركة في <em>الرّكين</em>. أضفتُ شهادتَين احترافيّتَين: <em>CAPM</em> من PMI، و<em>ITIL 4</em> من PeopleCert. أتخرّج بالمرتبة الثّانية على الدّفعة.">Leading HumeX as Team Leader of a 6-person capstone team — an AI occupancy measurement system for smart campuses. Led a website build team at Al-Rakeen. Added two professional credentials: CAPM (PMI) and ITIL 4 (PeopleCert). Graduating 2nd in cohort.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section class="section reveal" id="experience">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="04 / Experience" data-ar="٠٤ / الخبرات">04 / Experience</div>
-      <h2 class="section-title" data-en="Where I've &lt;span class='italic'&gt;worked&lt;/span&gt;." data-ar="أين &lt;span class='italic'&gt;عملت&lt;/span&gt;.">Where I've <span class="italic">worked</span>.</h2>
-    </div>
-
-    <div class="experience-list">
-      <div class="experience-item">
-        <div class="exp-date" data-en="Jun — Dec 2025 · 7 mos" data-ar="يونيو — ديسمبر ٢٠٢٥ · ٧ أشهر">Jun — Dec 2025 · 7 mos</div>
-        <div class="exp-content">
-          <h3 data-en="Information Technology Business Analyst <span class='company'>— Channels by stc</span>" data-ar="محلل أعمال تقنية المعلومات <span class='company'>— قنوات stc</span>">Information Technology Business Analyst <span class="company">— Channels by stc</span></h3>
-          <p class="exp-desc" data-en="Supported <em>10K+ users</em> across critical systems. Managed and validated change requests, contributed to BRD and requirements gathering, executed UAT and ensured system quality. Collaborated with stakeholders and cross-functional teams, improving system performance and delivery efficiency. Contributed to <em>AOUN AI</em> — qualified for Stage 2 of the Channels by stc Hackathon." data-ar="دعمتُ <em>أكثر من ١٠ آلاف مستخدم</em> عبر أنظمةٍ حيويّة. أدرتُ طلبات التّغيير والتحقّق من صحّتها، وساهمتُ في إعداد وثيقة متطلّبات الأعمال (BRD) وجمع المتطلّبات. نفّذتُ اختبارات قبول المستخدم (UAT) وضمنتُ جودة النّظام. تعاونتُ مع أصحاب المصلحة والفرق متعدّدة التّخصّصات، ممّا رفع أداء النّظام وكفاءة التّسليم. وساهمتُ في مشروع <em>عون AI</em> — الّذي تأهّل للمرحلة الثّانية من هاكاثون قنوات stc.">Supported <em>10K+ users</em> across critical systems. Managed and validated change requests, contributed to BRD and requirements gathering, executed UAT and ensured system quality. Collaborated with stakeholders and cross-functional teams, improving system performance and delivery efficiency. Contributed to <em>AOUN AI</em> — qualified for Stage 2 of the Channels by stc Hackathon.</p>
-          <div class="exp-tags">
-            <span class="exp-tag" data-en="Riyadh · On-site" data-ar="الرياض · حضوري">Riyadh · On-site</span>
-            <span class="exp-tag" data-en="Internship" data-ar="تدريب">Internship</span>
-            <span class="exp-tag">JIRA</span>
-            <span class="exp-tag" data-en="Quality System" data-ar="نظام الجودة">Quality System</span>
-            <span class="exp-tag">BRD</span>
-            <span class="exp-tag">UAT</span>
-            <span class="exp-tag" data-en="Requirements" data-ar="المتطلبات">Requirements</span>
-            <span class="exp-tag" data-en="Stakeholder Mgmt" data-ar="إدارة أصحاب المصلحة">Stakeholder Mgmt</span>
+        <div class="info-card reveal d3">
+          <div class="label">Education</div>
+          <div class="val">BSc Cybersecurity
+            <span class="sub">Univ. of Hafr Al-Batin</span>
+            <span class="sub">Feb 2022 — May 2026</span>
           </div>
         </div>
-        <div class="exp-arrow">→</div>
-      </div>
-
-      <div class="experience-item">
-        <div class="exp-date" data-en="Jan — Apr 2026 · 4 mos" data-ar="يناير — أبريل ٢٠٢٦ · ٤ أشهر">Jan — Apr 2026 · 4 mos</div>
-        <div class="exp-content">
-          <h3 data-en="Digital Product Development <span class='company'>— AL-RAKEEN</span>" data-ar="تطوير المنتجات الرقمية <span class='company'>— الركين</span>">Digital Product Development <span class="company">— AL-RAKEEN</span></h3>
-          <p class="exp-desc" data-en="<em>Led the development</em> of a company website — managing a team and coordinating tasks. Oversaw end-to-end website delivery and improved user experience. Collaborated with cross-functional teams to ensure alignment with business goals. Contributed to digital products and B2B solutions development, supported <em>low-code and AI-enabled workflows</em>, and improved conversion rates and delivery efficiency." data-ar="<em>قدتُ تطوير</em> موقع الشّركة — بإدارة الفريق وتنسيق المهامّ. أشرفتُ على تسليم الموقع من البداية إلى النّهاية، وحسّنتُ تجربة المستخدم. تعاونتُ مع فرقٍ متعدّدة التّخصّصات لضمان التّوافق مع أهداف الأعمال. ساهمتُ في تطوير المنتجات الرّقميّة وحلول B2B، ودعمتُ <em>سير عملٍ منخفض الكود ومُمكَّن بالذّكاء الاصطناعيّ</em>، ممّا رفع معدّلات التّحويل وكفاءة التّسليم."><em>Led the development</em> of a company website — managing a team and coordinating tasks. Oversaw end-to-end website delivery and improved user experience. Collaborated with cross-functional teams to ensure alignment with business goals. Contributed to digital products and B2B solutions development, supported <em>low-code and AI-enabled workflows</em>, and improved conversion rates and delivery efficiency.</p>
-          <div class="exp-tags">
-            <span class="exp-tag" data-en="Riyadh · Remote" data-ar="الرياض · عن بُعد">Riyadh · Remote</span>
-            <span class="exp-tag" data-en="Internship" data-ar="تدريب">Internship</span>
-            <span class="exp-tag" data-en="Team Lead" data-ar="قائد فريق">Team Lead</span>
-            <span class="exp-tag" data-en="Product Development" data-ar="تطوير منتجات">Product Development</span>
-            <span class="exp-tag" data-en="Product Marketing" data-ar="تسويق منتجات">Product Marketing</span>
-            <span class="exp-tag">B2B</span>
-            <span class="exp-tag" data-en="Low-Code" data-ar="منخفض الكود">Low-Code</span>
-            <span class="exp-tag" data-en="AI Workflows" data-ar="سير عمل AI">AI Workflows</span>
+        <div class="info-card reveal d4">
+          <div class="label">Based in</div>
+          <div class="val">Riyadh, Saudi Arabia
+            <span class="sub">open to relocation</span>
           </div>
         </div>
-        <div class="exp-arrow">→</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CAPSTONE -->
-<section class="section reveal" id="capstone">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="05 / Capstone" data-ar="٠٥ / مشروع التخرج">05 / Capstone</div>
-      <h2 class="section-title" data-en="The &lt;span class='italic'&gt;graduation&lt;/span&gt; project." data-ar="مشروع &lt;span class='italic'&gt;التّخرّج&lt;/span&gt;.">The <span class="italic">graduation</span> project.</h2>
-    </div>
-
-    <div class="capstone-card">
-      <div class="capstone-badge-row">
-        <span class="capstone-tag" data-en="Senior Capstone" data-ar="مشروع التخرج">Senior Capstone</span>
-        <span class="capstone-tag">2026</span>
-        <span class="capstone-tag capstone-tag-accent" data-en="★ Team Leader" data-ar="★ قائد الفريق">★ Team Leader</span>
-      </div>
-
-      <h3 class="capstone-title">HUMEX</h3>
-      <p class="capstone-subtitle" data-en="An AI occupancy measurement system for &lt;em&gt;smart campuses&lt;/em&gt; and facility management." data-ar="نظام ذكي لقياس الإشغال بالرؤية الحاسوبية للـ&lt;em&gt;حرم الجامعي الذكي&lt;/em&gt; وإدارة المرافق.">An AI occupancy measurement system for <em>smart campuses</em> and facility management.</p>
-
-      <div class="capstone-body" data-en="&lt;p&gt;HUMEX is a computer-vision platform that turns ordinary surveillance cameras into &lt;em&gt;real-time occupancy sensors&lt;/em&gt;. Instead of recording footage that no one watches, the system detects people, tracks movement, and surfaces density signals the moment they matter.&lt;/p&gt;&lt;p&gt;I led the end-to-end design: system analysis, requirements definition, architecture, and the interactive dashboard. The pipeline runs on &lt;em&gt;YOLOv8&lt;/em&gt; for detection, a tracking layer for movement continuity, and a React + Streamlit front-end that lets facility managers see what's happening — not just what happened.&lt;/p&gt;" data-ar="&lt;p&gt;HUMEX منصّةُ رؤيةٍ حاسوبيّة تُحوّل كاميرات المراقبة الاعتياديّة إلى &lt;em&gt;مُستشعرات إشغالٍ لحظيّة&lt;/em&gt;. فبدلاً من أن تُسجّل الكاميرا مشاهد لا يُطالعها أحد، يكتشف النّظام الأشخاص، ويتتبّع حركتهم، ويرفع مؤشّرات الكثافة في لحظتها.&lt;/p&gt;&lt;p&gt;قدتُ التّصميم من أوّله إلى آخره: تحليل النّظام، وتحديد المتطلّبات، والعمارة البرمجيّة، ولوحة التّحكّم التّفاعليّة. تعتمد المنظومة على &lt;em&gt;YOLOv8&lt;/em&gt; للاكتشاف، وطبقة تتبّعٍ لاستمراريّة الحركة، وواجهة React و Streamlit تمنح مُدراء المرافق رؤيةً لحظيّة لما يحدث — لا مُجرّد تسجيلٍ لما حدث.&lt;/p&gt;">
-        <p>HUMEX is a computer-vision platform that turns ordinary surveillance cameras into <em>real-time occupancy sensors</em>. Instead of recording footage that no one watches, the system detects people, tracks movement, and surfaces density signals the moment they matter.</p>
-        <p>I led the end-to-end design: system analysis, requirements definition, architecture, and the interactive dashboard. The pipeline runs on <em>YOLOv8</em> for detection, a tracking layer for movement continuity, and a React + Streamlit front-end that lets facility managers see what's happening — not just what happened.</p>
-      </div>
-
-      <div class="capstone-meta-grid">
-        <div class="capstone-meta-item">
-          <div class="capstone-meta-label" data-en="My Role" data-ar="دوري">My Role</div>
-          <div class="capstone-meta-value" data-en="Team Leader · Systems Analyst · Architect" data-ar="قائد فريق · محلل أنظمة · مهندس معماري">Team Leader · Systems Analyst · Architect</div>
-        </div>
-        <div class="capstone-meta-item">
-          <div class="capstone-meta-label" data-en="Team Size" data-ar="حجم الفريق">Team Size</div>
-          <div class="capstone-meta-value" data-en="6 Members" data-ar="٦ أعضاء">6 Members</div>
-        </div>
-        <div class="capstone-meta-item">
-          <div class="capstone-meta-label" data-en="Stack" data-ar="التقنيات">Stack</div>
-          <div class="capstone-meta-value">YOLOv8 · Python · OpenCV · React · Streamlit · AWS RDS</div>
-        </div>
-        <div class="capstone-meta-item">
-          <div class="capstone-meta-label" data-en="Domain" data-ar="المجال">Domain</div>
-          <div class="capstone-meta-value" data-en="Computer Vision · IoT · Smart Buildings" data-ar="رؤية حاسوبية · إنترنت الأشياء · مبانٍ ذكية">Computer Vision · IoT · Smart Buildings</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- UNIVERSITY PROJECTS -->
-<section class="section reveal" id="projects">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="06 / University Projects" data-ar="٠٦ / المشاريع الجامعية">06 / University Projects</div>
-      <h2 class="section-title" data-en="Led as &lt;span class='italic'&gt;team leader&lt;/span&gt;, across every course." data-ar="قدتها كـ&lt;span class='italic'&gt;قائد فريق&lt;/span&gt;، في كل مقرّر.">Led as <span class="italic">team leader</span>, across every course.</h2>
-    </div>
-
-    <p class="university-intro" data-en="Over four years of Computer Science &amp; Engineering, I led &lt;em&gt;8+ major course projects&lt;/em&gt; — from AI research surveys to full-stack systems and digital transformation proposals. Every project below was led end-to-end: requirements, design, team coordination, and delivery." data-ar="على مدى أربع سنواتٍ من دراسة علوم وهندسة الحاسب، قدتُ &lt;em&gt;أكثر من ثمانية مشاريع&lt;/em&gt; كبرى — من الأبحاث في الذّكاء الاصطناعيّ إلى الأنظمة المُتكاملة ومُقترحات التّحوّل الرّقميّ. كلّ مشروعٍ منها قدتُه من أوّله إلى آخره: جمع المتطلّبات، والتّصميم، وتنسيق الفريق، والتّسليم.">Over four years of Computer Science &amp; Engineering, I led <em>8+ major course projects</em> — from AI research surveys to full-stack systems and digital transformation proposals. Every project below was led end-to-end: requirements, design, team coordination, and delivery.</p>
-
-    <div class="uni-grid">
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 1101</span><span class="uni-year">2023</span></div>
-        <h3 class="uni-title" data-en="Intro to Programming &lt;span class='italic'&gt;— Student Attendance&lt;/span&gt;" data-ar="مقدمة في البرمجة &lt;span class='italic'&gt;— حضور الطلاب&lt;/span&gt;">Intro to Programming <span class="italic">— Student Attendance</span></h3>
-        <p class="uni-course-name" data-en="Programming Fundamentals" data-ar="أساسيات البرمجة">Programming Fundamentals</p>
-        <p class="uni-desc" data-en="My first real product — an &lt;em&gt;electronic attendance app&lt;/em&gt; for university students, submitted to the 3rd Programming Hackathon at Hafr Al-Batin." data-ar="أوّل منتجٍ حقيقيٍّ لي — &lt;em&gt;تطبيق حضورٍ إلكترونيّ&lt;/em&gt; لطلّاب الجامعة، قدّمتُه في هاكاثون البرمجة الثّالث بجامعة حفر الباطن.">My first real product — an <em>electronic attendance app</em> for university students, submitted to the 3rd Programming Hackathon at Hafr Al-Batin.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">Python</span>
-          <span class="exp-tag">EdTech</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 2201</span><span class="uni-year">2023</span></div>
-        <h3 class="uni-title" data-en="Object-Oriented &lt;span class='italic'&gt;— Inventory System&lt;/span&gt;" data-ar="البرمجة كائنية التوجّه &lt;span class='italic'&gt;— نظام مخزون&lt;/span&gt;">Object-Oriented <span class="italic">— Inventory System</span></h3>
-        <p class="uni-course-name" data-en="OOP &amp; Design Patterns" data-ar="البرمجة الكائنية وأنماط التصميم">OOP &amp; Design Patterns</p>
-        <p class="uni-desc" data-en="Designed an &lt;em&gt;inventory management system&lt;/em&gt; applying SOLID principles and key design patterns (Singleton, Factory, Observer) with UML diagrams." data-ar="صمّمتُ &lt;em&gt;نظام إدارة مخزون&lt;/em&gt; بتطبيق مبادئ SOLID وأبرز أنماط التّصميم (Singleton وFactory وObserver) مع مُخطّطات UML.">Designed an <em>inventory management system</em> applying SOLID principles and key design patterns (Singleton, Factory, Observer) with UML diagrams.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">Java</span>
-          <span class="exp-tag">OOP</span>
-          <span class="exp-tag" data-en="Design Patterns" data-ar="أنماط التصميم">Design Patterns</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 2301</span><span class="uni-year">2023</span></div>
-        <h3 class="uni-title" data-en="Data Structures &lt;span class='italic'&gt;— Route Optimizer&lt;/span&gt;" data-ar="هياكل البيانات &lt;span class='italic'&gt;— محسّن المسارات&lt;/span&gt;">Data Structures <span class="italic">— Route Optimizer</span></h3>
-        <p class="uni-course-name" data-en="Algorithms &amp; Data Structures" data-ar="الخوارزميات وهياكل البيانات">Algorithms &amp; Data Structures</p>
-        <p class="uni-desc" data-en="Implemented &lt;em&gt;Dijkstra's and A*&lt;/em&gt; algorithms on graph structures to solve a city-scale route optimization problem with real-time visualization." data-ar="نفّذتُ خوارزميَّتَي &lt;em&gt;Dijkstra وA*&lt;/em&gt; على هياكل الرّسم البيانيّ لحلّ مسألة تحسين المسارات على مستوى مدينةٍ كاملة، مع عرضٍ لحظيّ للمسار.">Implemented <em>Dijkstra's and A*</em> algorithms on graph structures to solve a city-scale route optimization problem with real-time visualization.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">Graphs</span>
-          <span class="exp-tag">Dijkstra</span>
-          <span class="exp-tag">Java</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 3201</span><span class="uni-year">2024</span></div>
-        <h3 class="uni-title" data-en="Database Systems &lt;span class='italic'&gt;— E-Library Platform&lt;/span&gt;" data-ar="أنظمة قواعد البيانات &lt;span class='italic'&gt;— منصة مكتبة رقمية&lt;/span&gt;">Database Systems <span class="italic">— E-Library Platform</span></h3>
-        <p class="uni-course-name" data-en="Database Design &amp; SQL" data-ar="تصميم قواعد البيانات وSQL">Database Design &amp; SQL</p>
-        <p class="uni-desc" data-en="Built an ER model, normalized schema, and SQL back-end for a &lt;em&gt;university e-library&lt;/em&gt;. Normalized to 3NF and stress-tested with 10K+ synthetic records." data-ar="بنيتُ نموذج ER ومُخطّطاً مُطبَّعاً وواجهةً خلفيّة بـ SQL لـ &lt;em&gt;مكتبةٍ جامعيّةٍ إلكترونيّة&lt;/em&gt;. أوصلتُ العلاقات إلى الصّيغة الطّبيعيّة الثّالثة، واختبرتُها تحت ضغط أكثر من ١٠ آلاف سجلّ.">Built an ER model, normalized schema, and SQL back-end for a <em>university e-library</em>. Normalized to 3NF and stress-tested with 10K+ synthetic records.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">MySQL</span>
-          <span class="exp-tag" data-en="ER Modeling" data-ar="نمذجة ER">ER Modeling</span>
-          <span class="exp-tag" data-en="Normalization" data-ar="التطبيع">Normalization</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 3301</span><span class="uni-year">2024</span></div>
-        <h3 class="uni-title" data-en="Computer Networks &lt;span class='italic'&gt;— Campus Network&lt;/span&gt;" data-ar="شبكات الحاسب &lt;span class='italic'&gt;— شبكة جامعية&lt;/span&gt;">Computer Networks <span class="italic">— Campus Network</span></h3>
-        <p class="uni-course-name" data-en="Networking &amp; Protocols" data-ar="الشبكات والبروتوكولات">Networking &amp; Protocols</p>
-        <p class="uni-desc" data-en="Simulated a full &lt;em&gt;enterprise network&lt;/em&gt; using Cisco Packet Tracer: VLANs, subnetting, routing protocols, DHCP, and ACLs." data-ar="حاكيتُ &lt;em&gt;شبكةً مؤسّسيّة متكاملة&lt;/em&gt; باستخدام Cisco Packet Tracer: شبكات VLAN، والتّقسيم الفرعيّ، وبروتوكولات التّوجيه، و DHCP، وقوائم التّحكّم بالوصول.">Simulated a full <em>enterprise network</em> using Cisco Packet Tracer: VLANs, subnetting, routing protocols, DHCP, and ACLs.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">Cisco</span>
-          <span class="exp-tag">VLANs</span>
-          <span class="exp-tag" data-en="Subnetting" data-ar="تقسيم فرعي">Subnetting</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 3102</span><span class="uni-year">2024</span></div>
-        <h3 class="uni-title" data-en="Software Engineering &lt;span class='italic'&gt;— Clinic System&lt;/span&gt;" data-ar="هندسة البرمجيات &lt;span class='italic'&gt;— نظام عيادة&lt;/span&gt;">Software Engineering <span class="italic">— Clinic System</span></h3>
-        <p class="uni-course-name" data-en="Software Engineering &amp; SDLC" data-ar="هندسة البرمجيات ودورة الحياة">Software Engineering &amp; SDLC</p>
-        <p class="uni-desc" data-en="Designed and documented a full-stack &lt;em&gt;clinic management system&lt;/em&gt; following SDLC best practices. Delivered SRS, use-case diagrams, and a working prototype." data-ar="صمّمتُ ووثّقتُ &lt;em&gt;نظام إدارة عيادةٍ متكامل&lt;/em&gt; وفق أفضل ممارسات دورة حياة تطوير البرمجيّات. سلّمتُ وثيقة المتطلّبات، ومُخطّطات حالات الاستخدام، ونموذجاً تجريبيّاً عاملاً.">Designed and documented a full-stack <em>clinic management system</em> following SDLC best practices. Delivered SRS, use-case diagrams, and a working prototype.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">UML</span>
-          <span class="exp-tag">SRS</span>
-          <span class="exp-tag">Java</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 4302</span><span class="uni-year">2025</span></div>
-        <h3 class="uni-title" data-en="Artificial Intelligence &lt;span class='italic'&gt;— RAG Survey&lt;/span&gt;" data-ar="الذكاء الاصطناعي &lt;span class='italic'&gt;— دراسة RAG&lt;/span&gt;">Artificial Intelligence <span class="italic">— RAG Survey</span></h3>
-        <p class="uni-course-name" data-en="AI / Natural Language Processing" data-ar="ذكاء اصطناعي / معالجة لغة طبيعية">AI / Natural Language Processing</p>
-        <p class="uni-desc" data-en="Led a 6-member team analyzing three landmark &lt;em&gt;Retrieval-Augmented Generation&lt;/em&gt; papers — mapping RAG's evolution into modular self-reflective systems." data-ar="قدتُ فريقاً من ستّة أعضاء في تحليل ثلاث أوراقٍ بحثيّة محوريّة في &lt;em&gt;التّوليد المُعزَّز بالاسترجاع&lt;/em&gt; — ورسمنا فيها مسار تطوّر RAG إلى أنظمةٍ مُعياريّة قادرةٍ على التّأمّل الذّاتيّ.">Led a 6-member team analyzing three landmark <em>Retrieval-Augmented Generation</em> papers — mapping RAG's evolution into modular self-reflective systems.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">LLMs</span>
-          <span class="exp-tag">RAG</span>
-          <span class="exp-tag" data-en="Research" data-ar="بحث علمي">Research</span>
-        </div>
-      </div>
-
-      <div class="uni-card">
-        <div class="uni-header"><span class="uni-course">CSEN 0242</span><span class="uni-year">2025</span></div>
-        <h3 class="uni-title" data-en="Digital Transformation &lt;span class='italic'&gt;— HumeX Pilot&lt;/span&gt;" data-ar="التحول الرقمي &lt;span class='italic'&gt;— تجربة HumeX&lt;/span&gt;">Digital Transformation <span class="italic">— HumeX Pilot</span></h3>
-        <p class="uni-course-name" data-en="Digital Transformation &amp; AI" data-ar="التحول الرقمي والذكاء الاصطناعي">Digital Transformation &amp; AI</p>
-        <p class="uni-desc" data-en="Proposed an &lt;em&gt;AI-powered crowd flow analytics platform&lt;/em&gt; for the University of Hafr Al-Batin, with live dashboards, heatmaps, and alerts." data-ar="اقترحتُ &lt;em&gt;منصّة تحليل تدفّق الحشود بالذّكاء الاصطناعيّ&lt;/em&gt; لجامعة حفر الباطن، مع لوحات تحكّمٍ لحظيّة، وخرائط حراريّة، وتنبيهات.">Proposed an <em>AI-powered crowd flow analytics platform</em> for the University of Hafr Al-Batin, with live dashboards, heatmaps, and alerts.</p>
-        <div class="uni-tags">
-          <span class="exp-tag" data-en="Team Leader" data-ar="قائد فريق">Team Leader</span>
-          <span class="exp-tag">YOLOv8</span>
-          <span class="exp-tag">AWS RDS</span>
-          <span class="exp-tag" data-en="Computer Vision" data-ar="رؤية حاسوبية">Computer Vision</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HACKATHONS -->
-<section class="section reveal" id="hackathons">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="07 / Hackathons" data-ar="٠٧ / الهاكاثونات">07 / Hackathons</div>
-      <h2 class="section-title" data-en="Built under &lt;span class='italic'&gt;pressure&lt;/span&gt;." data-ar="بُنِيَ تحت &lt;span class='italic'&gt;الضّغط&lt;/span&gt;.">Built under <span class="italic">pressure</span>.</h2>
-    </div>
-
-    <div class="hackathons-list">
-      <div class="hack-item">
-        <div class="hack-year">2023</div>
-        <div class="hack-content">
-          <div class="hack-result">
-            <span class="hack-medal">◉</span>
-            <span class="hack-place" data-en="Participant" data-ar="مشارك">Participant</span>
-          </div>
-          <h3 class="hack-name" data-en="3rd Programming Hackathon &lt;span class='italic'&gt;— University of Hafr Al-Batin&lt;/span&gt;" data-ar="هاكاثون البرمجة الثالث &lt;span class='italic'&gt;— جامعة حفر الباطن&lt;/span&gt;">3rd Programming Hackathon <span class="italic">— University of Hafr Al-Batin</span></h3>
-          <p class="hack-desc" data-en="Designed and built an &lt;em&gt;electronic attendance system&lt;/em&gt; for university students — my first taste of turning a real campus pain-point into a working product." data-ar="صمّمتُ وبنيتُ &lt;em&gt;نظام حضورٍ إلكترونيّ&lt;/em&gt; لطلّاب الجامعة — كانت تجربتي الأولى في تحويل مشكلةٍ جامعيّةٍ حقيقيّة إلى منتجٍ عامل.">Designed and built an <em>electronic attendance system</em> for university students — my first taste of turning a real campus pain-point into a working product.</p>
-          <div class="hack-tags">
-            <span class="exp-tag">EdTech</span>
-            <span class="exp-tag" data-en="First Hackathon" data-ar="أول هاكاثون">First Hackathon</span>
+        <div class="info-card reveal d5">
+          <div class="label">Languages</div>
+          <div class="val">Arabic — Native
+            <span class="sub">English — Professional</span>
           </div>
         </div>
-      </div>
-
-      <div class="hack-item">
-        <div class="hack-year">2024</div>
-        <div class="hack-content">
-          <div class="hack-result">
-            <span class="hack-medal">🥈</span>
-            <span class="hack-place" data-en="2nd Place" data-ar="المركز الثاني">2nd Place</span>
-          </div>
-          <h3 class="hack-name" data-en="CyberThon &lt;span class='italic'&gt;— Hafr Al-Batin&lt;/span&gt;" data-ar="سايبرثون &lt;span class='italic'&gt;— حفر الباطن&lt;/span&gt;">CyberThon <span class="italic">— Hafr Al-Batin</span></h3>
-          <p class="hack-desc" data-en="Built a platform that &lt;em&gt;detects phishing links and fraudulent messages&lt;/em&gt;. Finished in 2nd place, recognized for the clarity of the analysis behind the detection logic." data-ar="بنيتُ منصّةً &lt;em&gt;تكشف روابط التّصيّد والرّسائل الاحتياليّة&lt;/em&gt;. حصدتُ المركز الثّاني، ونلتُ الإشادة على وضوح التّحليل خلف منطق الكشف.">Built a platform that <em>detects phishing links and fraudulent messages</em>. Finished in 2nd place, recognized for the clarity of the analysis behind the detection logic.</p>
-          <div class="hack-tags">
-            <span class="exp-tag" data-en="Cybersecurity" data-ar="الأمن السيبراني">Cybersecurity</span>
-            <span class="exp-tag" data-en="Phishing Detection" data-ar="كشف التصيد">Phishing Detection</span>
-            <span class="exp-tag" data-en="Web App" data-ar="تطبيق ويب">Web App</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hack-item">
-        <div class="hack-year">2024</div>
-        <div class="hack-content">
-          <div class="hack-result">
-            <span class="hack-medal">🏁</span>
-            <span class="hack-place" data-en="Finalist" data-ar="متأهل للنهائيات">Finalist</span>
-          </div>
-          <h3 class="hack-name" data-en="Absher Tuwaiq Hackathon &lt;span class='italic'&gt;— RASHID&lt;/span&gt;" data-ar="هاكاثون أبشر طويق &lt;span class='italic'&gt;— رشيد&lt;/span&gt;">Absher Tuwaiq Hackathon <span class="italic">— RASHID</span></h3>
-          <p class="hack-desc" data-en="Analyzed access-control workflows for government entities and designed &lt;em&gt;RASHID&lt;/em&gt; — a GPT-powered smart gate system. Reached the finals." data-ar="حلّلتُ تدفّقات التّحكّم بالوصول للجهات الحكوميّة، وصمّمتُ &lt;em&gt;رشيد&lt;/em&gt; — نظام بوّابةٍ ذكيّة مدعومٍ بـ GPT. تأهّلتُ إلى النّهائيّات.">Analyzed access-control workflows for government entities and designed <em>RASHID</em> — a GPT-powered smart gate system. Reached the finals.</p>
-          <div class="hack-tags">
-            <span class="exp-tag">GPT / AI</span>
-            <span class="exp-tag" data-en="Gov. Tech" data-ar="تقنية حكومية">Gov. Tech</span>
-            <span class="exp-tag" data-en="Access Control" data-ar="التحكم بالوصول">Access Control</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hack-item">
-        <div class="hack-year">2025</div>
-        <div class="hack-content">
-          <div class="hack-result">
-            <span class="hack-medal">◈</span>
-            <span class="hack-place" data-en="Stage 2 Qualifier" data-ar="متأهل للمرحلة الثانية">Stage 2 Qualifier</span>
-          </div>
-          <h3 class="hack-name" data-en="Channels by stc Hackathon &lt;span class='italic'&gt;— AOUN AI&lt;/span&gt;" data-ar="هاكاثون قنوات stc &lt;span class='italic'&gt;— عون AI&lt;/span&gt;">Channels by stc Hackathon <span class="italic">— AOUN AI</span></h3>
-          <p class="hack-desc" data-en="Contributed to &lt;em&gt;AOUN AI&lt;/em&gt;, an intelligent request management platform. Shaped the business requirements and workflow analysis — qualifying to Stage 2." data-ar="ساهمتُ في &lt;em&gt;عون AI&lt;/em&gt;، منصّة ذكيّة لإدارة الطّلبات. صغتُ متطلّبات الأعمال وحلّلتُ سير العمل — فتأهّل المشروع إلى المرحلة الثّانية.">Contributed to <em>AOUN AI</em>, an intelligent request management platform. Shaped the business requirements and workflow analysis — qualifying to Stage 2.</p>
-          <div class="hack-tags">
-            <span class="exp-tag" data-en="AI Platform" data-ar="منصة ذكاء اصطناعي">AI Platform</span>
-            <span class="exp-tag" data-en="Request Mgmt" data-ar="إدارة الطلبات">Request Mgmt</span>
-            <span class="exp-tag" data-en="Business Analysis" data-ar="تحليل أعمال">Business Analysis</span>
+        <div class="info-card reveal d6">
+          <div class="label">Status</div>
+          <div class="val" style="color: var(--accent-2);">● Available for hire
+            <span class="sub">graduation · May 2026</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SKILLS — THE ARSENAL -->
-<section class="section reveal">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="08 / The Arsenal" data-ar="٠٨ / الترسانة">08 / The Arsenal</div>
-      <h2 class="section-title" data-en="Three disciplines. &lt;span class='italic'&gt;One analyst.&lt;/span&gt;" data-ar="ثلاثة تخصصات. &lt;span class='italic'&gt;محلل واحد.&lt;/span&gt;">Three disciplines. <span class="italic">One analyst.</span></h2>
+  <!-- ============== EXPERIENCE ============== -->
+  <section id="experience">
+    <div class="section-tag reveal">[ 02 ]</div>
+    <h2 class="section-title reveal d1">Experience<span class="mono">_</span></h2>
+    <div class="section-sub reveal d2">log entries</div>
+
+    <div>
+      <article class="xp-item reveal d2">
+        <div class="xp-date">JUN — AUG<br/>2025</div>
+        <div class="xp-main">
+          <h3>Cybersecurity Specialist · Co-Op <span class="xp-arrow">→</span></h3>
+          <div class="xp-org">King Fahad Medical City (KFMC), Riyadh</div>
+          <div class="xp-desc">
+            <p>Monitored and analyzed cybersecurity systems and network protection, supporting real-time threat detection across hospital infrastructure.</p>
+            <p>Participated in incident response operations and log analysis, supported IT teams in managing security systems and endpoint protection.</p>
+          </div>
+          <div class="xp-tags">
+            <span class="tag">SOC Monitoring</span>
+            <span class="tag">Incident Response</span>
+            <span class="tag">Log Analysis</span>
+            <span class="tag">Endpoint Protection</span>
+            <span class="tag">Healthcare Infra</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="xp-item reveal d3">
+        <div class="xp-date">FEB 2022<br/>— MAY 2026</div>
+        <div class="xp-main">
+          <h3>Bachelor in Cybersecurity <span class="xp-arrow">→</span></h3>
+          <div class="xp-org">University of Hafr Al-Batin (UHB)</div>
+          <div class="xp-desc">
+            <p>College of Computer Science &amp; Engineering — coursework across network security, cryptography, secure systems, digital forensics, and governance/compliance. Capstone: Honeypot + SIEM Threat Detection Platform.</p>
+          </div>
+          <div class="xp-tags">
+            <span class="tag">Network Security</span>
+            <span class="tag">Cryptography</span>
+            <span class="tag">Forensics</span>
+            <span class="tag">Governance</span>
+          </div>
+        </div>
+      </article>
     </div>
+  </section>
 
-    <p class="arsenal-intro" data-en="I don't pick sides. I &lt;span class='accent'&gt;analyze&lt;/span&gt; like a consultant, &lt;span class='accent'&gt;deliver&lt;/span&gt; like a PM, and &lt;span class='accent'&gt;build&lt;/span&gt; like an engineer." data-ar="لا أنحاز إلى جانبٍ واحد. &lt;span class='accent'&gt;أُحلّل&lt;/span&gt; كاستشاريٍّ، و&lt;span class='accent'&gt;أُسلّم&lt;/span&gt; كمدير مشاريع، و&lt;span class='accent'&gt;أبني&lt;/span&gt; كمهندس.">I don't pick sides. I <span class="accent">analyze</span> like a consultant, <span class="accent">deliver</span> like a PM, and <span class="accent">build</span> like an engineer.</p>
+  <!-- ============== PROJECTS ============== -->
+  <section id="projects">
+    <div class="section-tag reveal">[ 03 ]</div>
+    <h2 class="section-title reveal d1">Projects<span class="mono">/</span></h2>
+    <div class="section-sub reveal d2">selected works · 2025–2026</div>
 
-    <div class="arsenal">
+    <div class="projects-grid">
 
-      <!-- COLUMN 1: ANALYSIS -->
-      <div class="arsenal-column" data-index="01">
-        <div class="arsenal-header">
+      <article class="project reveal d2">
+        <div class="project-num"><span class="hash">#</span>01</div>
+        <div class="project-body">
+          <div class="ptype">PROJECT 001 · CAPSTONE 2026</div>
+          <h3>Honeypot + SIEM</h3>
+          <p style="color: var(--ink-mute); font-family: var(--mono); font-size:12px; letter-spacing: .05em; margin-bottom: 14px;">&gt; Threat Detection &amp; Centralized Security Monitoring Platform</p>
+          <p>
+            Designed and deployed a <strong>Cowrie / T-Pot honeypot</strong> integrated with an
+            <strong>ELK / Wazuh SIEM</strong> to capture and analyze real-world attacker behavior
+            in a controlled environment. Built log collection pipelines, wrote threat detection
+            rules, and created dashboards — mapping observed <strong>TTPs to MITRE ATT&amp;CK</strong>
+            and generating SOC-style incident reports.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Cowrie</span>
+            <span class="tag">T-Pot</span>
+            <span class="tag">ELK Stack</span>
+            <span class="tag">Wazuh</span>
+            <span class="tag">MITRE ATT&amp;CK</span>
+            <span class="tag">Detection Rules</span>
+            <span class="tag">Dashboards</span>
+          </div>
+        </div>
+        <div class="project-aside">
           <div>
-            <div class="arsenal-kicker" data-en="Discipline I" data-ar="التخصص الأول">Discipline I</div>
-            <h3 class="arsenal-title" data-en="Analysis &amp; &lt;br&gt;Process" data-ar="التحليل &lt;br&gt;والعمليات">Analysis &amp; <br>Process</h3>
+            <div class="status-line active">ACTIVE</div>
+<pre class="ascii-art">[ATTACKER]
+    │
+    ▼
+[HONEYPOT]
+ Cowrie/T-Pot
+    │
+    ▼
+[LOG PIPELINE]
+    │
+    ▼
+[SIEM]
+ ELK · Wazuh
+    │
+    ▼
+[MITRE ATT&amp;CK]
+    │
+    ▼
+[SOC REPORT]</pre>
           </div>
-          <div class="arsenal-count" data-en="06 / skills" data-ar="٠٦ / مهارة">06 / skills</div>
         </div>
+      </article>
 
-        <ul class="arsenal-list">
-          <li>
-            <span class="arsenal-num">01</span>
-            <span class="arsenal-skill" data-en="Business Requirements" data-ar="متطلبات الأعمال">Business Requirements</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">02</span>
-            <span class="arsenal-skill" data-en="Systems Analysis &amp; Design" data-ar="تحليل وتصميم الأنظمة">Systems Analysis &amp; Design</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">03</span>
-            <span class="arsenal-skill" data-en="Functional Requirements" data-ar="المتطلبات الوظيفية">Functional Requirements</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">04</span>
-            <span class="arsenal-skill" data-en="UML &amp; BPMN Modeling" data-ar="نمذجة UML و BPMN">UML &amp; BPMN Modeling</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">05</span>
-            <span class="arsenal-skill" data-en="SDLC Mastery" data-ar="إتقان دورة الحياة">SDLC Mastery</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">06</span>
-            <span class="arsenal-skill" data-en="Stakeholder Management" data-ar="إدارة أصحاب المصلحة">Stakeholder Management</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-        </ul>
-
-        <div class="arsenal-footer">
-          <span data-en="Where chaos becomes clarity" data-ar="هنا تتحوّل الفوضى إلى وضوح">Where chaos becomes clarity</span>
-          <span class="arsenal-dot"></span>
+      <article class="project reveal d3">
+        <div class="project-num"><span class="hash">#</span>02</div>
+        <div class="project-body">
+          <div class="ptype">PROJECT 002 · CO-OP 2025</div>
+          <h3>KFMC Monitoring</h3>
+          <p style="color: var(--ink-mute); font-family: var(--mono); font-size:12px; letter-spacing: .05em; margin-bottom: 14px;">&gt; Hospital SOC contribution</p>
+          <p>
+            Contributed to security monitoring and incident response operations during the KFMC
+            internship — supported log review, alert triage, and network protection workflows
+            inside a live healthcare SOC environment.
+          </p>
+          <div class="project-tags">
+            <span class="tag">SOC</span>
+            <span class="tag">Alert Triage</span>
+            <span class="tag">Log Review</span>
+            <span class="tag">Network Defense</span>
+          </div>
         </div>
-      </div>
-
-      <!-- COLUMN 2: DELIVERY -->
-      <div class="arsenal-column" data-index="02">
-        <div class="arsenal-header">
+        <div class="project-aside">
           <div>
-            <div class="arsenal-kicker" data-en="Discipline II" data-ar="التخصص الثاني">Discipline II</div>
-            <h3 class="arsenal-title" data-en="Delivery &amp; &lt;br&gt;Execution" data-ar="التسليم &lt;br&gt;والتنفيذ">Delivery &amp; <br>Execution</h3>
+            <div class="status-line done">COMPLETED</div>
+<pre class="ascii-art">[ HOSPITAL NET ]
+      │
+   ┌──┴──┐
+   │ SOC │
+   └──┬──┘
+      │
+ ┌────┴────┐
+ │ TRIAGE  │
+ │ REVIEW  │
+ │ DEFEND  │
+ └─────────┘</pre>
           </div>
-          <div class="arsenal-count" data-en="06 / skills" data-ar="٠٦ / مهارة">06 / skills</div>
         </div>
+      </article>
 
-        <ul class="arsenal-list">
-          <li>
-            <span class="arsenal-num">01</span>
-            <span class="arsenal-skill" data-en="Agile / Scrum" data-ar="أجايل / سكرم">Agile / Scrum</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">02</span>
-            <span class="arsenal-skill" data-en="Jira &amp; Confluence" data-ar="Jira و Confluence">Jira &amp; Confluence</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">03</span>
-            <span class="arsenal-skill" data-en="API Integration — Postman" data-ar="تكامل API — Postman">API Integration — Postman</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">04</span>
-            <span class="arsenal-skill" data-en="Project Management — CAPM" data-ar="إدارة المشاريع — CAPM">Project Management — CAPM</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">05</span>
-            <span class="arsenal-skill" data-en="ITIL 4 Framework" data-ar="إطار ITIL 4">ITIL 4 Framework</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">06</span>
-            <span class="arsenal-skill" data-en="Risk &amp; Governance" data-ar="المخاطر والحوكمة">Risk &amp; Governance</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-        </ul>
-
-        <div class="arsenal-footer">
-          <span data-en="Where plans become products" data-ar="هنا تتحوّل الخطط إلى منتجات">Where plans become products</span>
-          <span class="arsenal-dot"></span>
+      <article class="project reveal d4">
+        <div class="project-num"><span class="hash">#</span>03</div>
+        <div class="project-body">
+          <div class="ptype">PROJECT 003 · LAB</div>
+          <h3>Pentest Lab</h3>
+          <p style="color: var(--ink-mute); font-family: var(--mono); font-size:12px; letter-spacing: .05em; margin-bottom: 14px;">&gt; Offensive security exercises</p>
+          <p>
+            Hands-on vulnerability assessment and exploitation — web app testing, network recon,
+            and privilege escalation chains — using Kali Linux, Metasploit, Nmap, Burp Suite, and
+            Wireshark. Ongoing practice on TryHackMe and HackTheBox.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Kali Linux</span>
+            <span class="tag">Metasploit</span>
+            <span class="tag">Nmap</span>
+            <span class="tag">Burp Suite</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">THM / HTB</span>
+          </div>
         </div>
-      </div>
-
-      <!-- COLUMN 3: TECHNICAL -->
-      <div class="arsenal-column" data-index="03">
-        <div class="arsenal-header">
+        <div class="project-aside">
           <div>
-            <div class="arsenal-kicker" data-en="Discipline III" data-ar="التخصص الثالث">Discipline III</div>
-            <h3 class="arsenal-title" data-en="Technical &lt;br&gt;Foundation" data-ar="الأساس &lt;br&gt;التقني">Technical <br>Foundation</h3>
+            <div class="status-line ongoing">ONGOING</div>
+<pre class="ascii-art">[ RECON ]
+    │
+[ SCAN ]
+    │
+[ EXPLOIT ]
+    │
+[ PRIV-ESC ]
+    │
+[ PERSIST ]
+    │
+[ REPORT ]</pre>
           </div>
-          <div class="arsenal-count" data-en="06 / skills" data-ar="٠٦ / مهارة">06 / skills</div>
         </div>
-
-        <ul class="arsenal-list">
-          <li>
-            <span class="arsenal-num">01</span>
-            <span class="arsenal-skill" data-en="SQL &amp; Databases" data-ar="SQL وقواعد البيانات">SQL &amp; Databases</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">02</span>
-            <span class="arsenal-skill" data-en="Data Analysis" data-ar="تحليل البيانات">Data Analysis</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">03</span>
-            <span class="arsenal-skill" data-en="Java &amp; Spring Boot" data-ar="Java و Spring Boot">Java &amp; Spring Boot</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">04</span>
-            <span class="arsenal-skill" data-en="Python" data-ar="بايثون">Python</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">05</span>
-            <span class="arsenal-skill" data-en="Cloud — Huawei Certified" data-ar="السحابة — معتمد هواوي">Cloud — Huawei Certified</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar"></span>
-            </span>
-          </li>
-          <li>
-            <span class="arsenal-num">06</span>
-            <span class="arsenal-skill" data-en="AI / Generative AI" data-ar="الذكاء الاصطناعي / التوليدي">AI / Generative AI</span>
-            <span class="arsenal-level">
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-              <span class="arsenal-bar filled"></span>
-            </span>
-          </li>
-        </ul>
-
-        <div class="arsenal-footer">
-          <span data-en="Where ideas become real" data-ar="هنا تتحوّل الأفكار إلى واقع">Where ideas become real</span>
-          <span class="arsenal-dot"></span>
-        </div>
-      </div>
+      </article>
 
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CERTIFICATIONS -->
-<section class="section reveal">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="09 / Certifications" data-ar="٠٩ / الشهادات">09 / Certifications</div>
-      <h2 class="section-title" data-en="Credentialed &amp; <span class='italic'>current</span>." data-ar="شهادات <span class='italic'>معتمدة</span> وسارية.">Credentialed &amp; <span class="italic">current</span>.</h2>
-    </div>
+  <!-- ============== SKILLS ============== -->
+  <section id="skills">
+    <div class="section-tag reveal">[ 04 ]</div>
+    <h2 class="section-title reveal d1">Technical Stack<span class="mono">*</span></h2>
+    <div class="section-sub reveal d2">tools · frameworks · domains</div>
 
-    <!-- Tier 1: Professional -->
-    <div class="cert-tier-label">
-      <span class="cert-tier-kicker" data-en="Tier I" data-ar="الفئة الأولى">Tier I</span>
-      <h3 class="cert-tier-title" data-en="Professional <span class='italic'>Certifications</span>" data-ar="شهادات <span class='italic'>احترافية</span>">Professional <span class="italic">Certifications</span></h3>
-      <p class="cert-tier-desc" data-en="Globally-recognized, examined, and renewable credentials." data-ar="شهادات معتمدة دولياً، باختبار، وقابلة للتجديد.">Globally-recognized, examined, and renewable credentials.</p>
-    </div>
-
-    <div class="certs-grid certs-grid-pro">
-      <div class="cert-card cert-card-pro">
-        <div class="cert-badge" data-en="PRO" data-ar="احترافي">PRO</div>
-        <div class="cert-issuer">PMI</div>
-        <h3 class="cert-name" data-en="CAPM — <span class='italic'>Project Management</span>" data-ar="CAPM — <span class='italic'>إدارة المشاريع</span>">CAPM — <span class="italic">Project Management</span></h3>
-        <div class="cert-date" data-en="Valid: May 2026 — May 2029" data-ar="صالحة: مايو ٢٠٢٦ — مايو ٢٠٢٩">Valid: May 2026 — May 2029</div>
+    <div class="skills-grid reveal d2">
+      <div class="skill">
+        <div class="skill-code">DEF</div>
+        <div class="skill-title">SOC Operations &amp; Monitoring</div>
+        <div class="skill-sub">alerting · triage</div>
       </div>
-      <div class="cert-card cert-card-pro">
-        <div class="cert-badge" data-en="PRO" data-ar="احترافي">PRO</div>
-        <div class="cert-issuer">PeopleCert</div>
-        <h3 class="cert-name" data-en="ITIL 4 <span class='italic'>Foundation</span>" data-ar="ITIL 4 <span class='italic'>Foundation</span>">ITIL 4 <span class="italic">Foundation</span></h3>
-        <div class="cert-date" data-en="Valid: Jun 2026 — Jun 2029" data-ar="صالحة: يونيو ٢٠٢٦ — يونيو ٢٠٢٩">Valid: Jun 2026 — Jun 2029</div>
+      <div class="skill">
+        <div class="skill-code">SIEM</div>
+        <div class="skill-title">ELK · Wazuh · Splunk</div>
+        <div class="skill-sub">log pipelines · dashboards</div>
       </div>
-      <div class="cert-card cert-card-pro">
-        <div class="cert-badge" data-en="PRO" data-ar="احترافي">PRO</div>
-        <div class="cert-issuer">Udacity</div>
-        <h3 class="cert-name" data-en="AI Product Manager <span class='italic'>Nanodegree</span>" data-ar="مدير منتجات <span class='italic'>الذكاء الاصطناعي</span>">AI Product Manager <span class="italic">Nanodegree</span></h3>
-        <div class="cert-date" data-en="Issued: Oct 2025" data-ar="صدرت: أكتوبر ٢٠٢٥">Issued: Oct 2025</div>
+      <div class="skill">
+        <div class="skill-code">OFF</div>
+        <div class="skill-title">Penetration Testing</div>
+        <div class="skill-sub">web · network · wireless</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">HUNT</div>
+        <div class="skill-title">Threat Intelligence &amp; Hunting</div>
+        <div class="skill-sub">IoC · behavioral</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">VA</div>
+        <div class="skill-title">Vulnerability Assessment</div>
+        <div class="skill-sub">scanning · reporting</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">IR</div>
+        <div class="skill-title">Incident Response &amp; Forensics</div>
+        <div class="skill-sub">containment · analysis</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">TOOL</div>
+        <div class="skill-title">Kali · Metasploit · Nmap</div>
+        <div class="skill-sub">offense toolkit</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">TOOL</div>
+        <div class="skill-title">Wireshark &amp; Burp Suite</div>
+        <div class="skill-sub">traffic · web testing</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">FW</div>
+        <div class="skill-title">MITRE ATT&amp;CK Framework</div>
+        <div class="skill-sub">TTP mapping</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">NET</div>
+        <div class="skill-title">Firewalls · IDS/IPS · VPN</div>
+        <div class="skill-sub">perimeter defense</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">DEV</div>
+        <div class="skill-title">Log Analysis · Python</div>
+        <div class="skill-sub">scripting · automation</div>
+      </div>
+      <div class="skill">
+        <div class="skill-code">GOV</div>
+        <div class="skill-title">NCA ECC · SAMA Compliance</div>
+        <div class="skill-sub">KSA regulatory</div>
       </div>
     </div>
+  </section>
 
-    <!-- Tier 2: Training & Courses -->
-    <div class="cert-tier-label cert-tier-label-2">
-      <span class="cert-tier-kicker" data-en="Tier II" data-ar="الفئة الثانية">Tier II</span>
-      <h3 class="cert-tier-title" data-en="Training &amp; <span class='italic'>Courses</span>" data-ar="تدريبات و<span class='italic'>دورات</span>">Training &amp; <span class="italic">Courses</span></h3>
-      <p class="cert-tier-desc" data-en="Specialized programs from national academies and global institutions." data-ar="برامج متخصصة من أكاديميات وطنية ومؤسسات عالمية.">Specialized programs from national academies and global institutions.</p>
-    </div>
+  <!-- ============== CERTIFICATIONS ============== -->
+  <section id="certs">
+    <div class="section-tag reveal">[ 05 ]</div>
+    <h2 class="section-title reveal d1">Certifications<span class="mono">#</span></h2>
+    <div class="section-sub reveal d2">credentials · verified</div>
 
     <div class="certs-grid">
-      <div class="cert-card">
-        <div class="cert-issuer">IBMI</div>
-        <h3 class="cert-name" data-en="Digital <span class='italic'>Transformation</span>" data-ar="<span class='italic'>التحوّل</span> الرقمي">Digital <span class="italic">Transformation</span></h3>
-        <div class="cert-date" data-en="Issued: 2026" data-ar="صدرت: ٢٠٢٦">Issued: 2026</div>
+      <div class="cert reveal d2">
+        <div class="cert-badge">40H<br/>CERT</div>
+        <div class="cert-body">
+          <h4>Information Security Systems Audit</h4>
+          <div class="cert-issuer">Tuwaiq Academy · 40 hours</div>
+          <div class="cert-date">FEB 2026</div>
+        </div>
       </div>
-      <div class="cert-card">
-        <div class="cert-issuer">Product School</div>
-        <h3 class="cert-name" data-en="Product-Led Growth <span class='italic'>PLGC</span>" data-ar="النموّ بقيادة المنتج <span class='italic'>PLGC</span>">Product-Led Growth <span class="italic">PLGC</span></h3>
-        <div class="cert-date" data-en="Issued: 2026" data-ar="صدرت: ٢٠٢٦">Issued: 2026</div>
+      <div class="cert reveal d2">
+        <div class="cert-badge">NET<br/>102</div>
+        <div class="cert-body">
+          <h4>Network Security 102</h4>
+          <div class="cert-issuer">Satr — Tuwaiq Academy</div>
+          <div class="cert-date">JAN 2026</div>
+        </div>
       </div>
-      <div class="cert-card">
-        <div class="cert-issuer" data-en="Tuwaiq Academy" data-ar="أكاديمية طويق">Tuwaiq Academy</div>
-        <h3 class="cert-name" data-en="Risk Mgmt in <span class='italic'>Generative AI</span>" data-ar="إدارة مخاطر <span class='italic'>الذكاء التوليدي</span>">Risk Mgmt in <span class="italic">Generative AI</span></h3>
-        <div class="cert-date" data-en="Issued: 2025" data-ar="صدرت: ٢٠٢٥">Issued: 2025</div>
+      <div class="cert reveal d3">
+        <div class="cert-badge">CISCO<br/>EH</div>
+        <div class="cert-body">
+          <h4>Ethical Hacker</h4>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <div class="cert-date">JAN 2026</div>
+        </div>
       </div>
-      <div class="cert-card">
-        <div class="cert-issuer">SDAIA</div>
-        <h3 class="cert-name" data-en="Fundamentals of <span class='italic'>AI</span>" data-ar="أساسيات <span class='italic'>الذكاء الاصطناعي</span>">Fundamentals of <span class="italic">AI</span></h3>
-        <div class="cert-date" data-en="Issued: 2024" data-ar="صدرت: ٢٠٢٤">Issued: 2024</div>
+      <div class="cert reveal d3">
+        <div class="cert-badge">CISCO<br/>ND</div>
+        <div class="cert-body">
+          <h4>Network Defense</h4>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <div class="cert-date">JAN 2026</div>
+        </div>
       </div>
-      <div class="cert-card">
-        <div class="cert-issuer">Huawei</div>
-        <h3 class="cert-name" data-en="Cloud <span class='italic'>Computing</span>" data-ar="الحوسبة <span class='italic'>السحابية</span>">Cloud <span class="italic">Computing</span></h3>
-        <div class="cert-date" data-en="Issued: 2024" data-ar="صدرت: ٢٠٢٤">Issued: 2024</div>
+      <div class="cert reveal d4">
+        <div class="cert-badge">AI<br/>HRZ</div>
+        <div class="cert-body">
+          <h4>AI Horizons</h4>
+          <div class="cert-issuer">IBM SkillsBuild &amp; eYouth</div>
+          <div class="cert-date">JAN 2026</div>
+        </div>
       </div>
-      <div class="cert-card">
-        <div class="cert-issuer" data-en="NCA · SITE · KAUST" data-ar="الهيئة الوطنية · سايت · كاوست">NCA · SITE · KAUST</div>
-        <h3 class="cert-name" data-en="Cybersecurity <span class='italic'>Training</span>" data-ar="تدريب <span class='italic'>الأمن السيبراني</span>">Cybersecurity <span class="italic">Training</span></h3>
-        <div class="cert-date" data-en="6+ specialized courses · 2024" data-ar="أكثر من ٦ دورات متخصّصة · ٢٠٢٤">6+ specialized courses · 2024</div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-issuer" data-en="University of Michigan" data-ar="جامعة ميشيغان">University of Michigan</div>
-        <h3 class="cert-name" data-en="Python <span class='italic'>Basics</span>" data-ar="أساسيات <span class='italic'>بايثون</span>">Python <span class="italic">Basics</span></h3>
-        <div class="cert-date" data-en="Issued: 2023" data-ar="صدرت: ٢٠٢٣">Issued: 2023</div>
+      <div class="cert reveal d4">
+        <div class="cert-badge">SDAIA<br/>AI</div>
+        <div class="cert-body">
+          <h4>Fundamentals of Artificial Intelligence</h4>
+          <div class="cert-issuer">SDAIA (SAMAI)</div>
+          <div class="cert-date">SEP 2025</div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- RECOGNITION -->
-<section class="section reveal" id="recognition">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="10 / Recognition" data-ar="١٠ / التقدير">10 / Recognition</div>
-      <h2 class="section-title" data-en="Measured in &lt;span class='italic'&gt;institutions&lt;/span&gt;, not opinions." data-ar="مُقاسٌ بـ&lt;span class='italic'&gt;مؤسّساتٍ معتمدة&lt;/span&gt;، لا بالآراء.">Measured in <span class="italic">institutions</span>, not opinions.</h2>
+  <!-- ============== CONTACT ============== -->
+  <section id="contact">
+    <div class="section-tag reveal">[ 06 ]</div>
+    <h2 class="section-title reveal d1">Contact<span class="mono">.</span></h2>
+    <div class="section-sub reveal d2">establish connection</div>
+
+    <div class="contact-wrap reveal d2">
+      <h2>let's build<br/><em>something secure</em><br/>together.</h2>
+      <p class="contact-sub">
+        // Open to SOC Analyst · Threat Hunter · Security Audit roles across KSA.<br/>
+        // Reach out — response guaranteed within 24 hours.
+      </p>
+
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:Mohmmad.Aldhfeeri@outlook.com">
+          <div>
+            <div class="k">email</div>
+            <div class="v">Mohmmad.Aldhfeeri@outlook.com</div>
+          </div>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="contact-link" href="tel:+966592917727">
+          <div>
+            <div class="k">phone</div>
+            <div class="v">+966 59 291 7727</div>
+          </div>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="contact-link" href="https://www.linkedin.com/in/mohmmad-aldhfeeri-72383b3a8" target="_blank" rel="noopener">
+          <div>
+            <div class="k">linkedin</div>
+            <div class="v">/in/mohmmad-aldhfeeri</div>
+          </div>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="contact-link" href="https://github.com/Mohmmadaldhfeeri" target="_blank" rel="noopener">
+          <div>
+            <div class="k">github</div>
+            <div class="v">@Mohmmadaldhfeeri</div>
+          </div>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
     </div>
+  </section>
 
-    <div class="press-grid">
-      <div class="press-card">
-        <div class="press-source" data-en="Project Management Institute" data-ar="معهد إدارة المشاريع">Project Management Institute</div>
-        <div class="press-quote" data-en="Certified Associate in &lt;span class='accent'&gt;Project Management&lt;/span&gt;" data-ar="&lt;span class='accent'&gt;معتمد&lt;/span&gt; في إدارة المشاريع">Certified Associate in <span class="accent">Project Management</span></div>
-        <div class="press-detail" data-en="CAPM · Valid 2026–2029" data-ar="CAPM · سارية ٢٠٢٦–٢٠٢٩">CAPM · Valid 2026–2029</div>
-      </div>
-      <div class="press-card">
-        <div class="press-source">PeopleCert</div>
-        <div class="press-quote" data-en="Foundation in &lt;span class='accent'&gt;IT Service Management&lt;/span&gt;" data-ar="أساسيات &lt;span class='accent'&gt;إدارة خدمات تقنية المعلومات&lt;/span&gt;">Foundation in <span class="accent">IT Service Management</span></div>
-        <div class="press-detail" data-en="ITIL 4 · Valid 2026–2029" data-ar="ITIL 4 · سارية ٢٠٢٦–٢٠٢٩">ITIL 4 · Valid 2026–2029</div>
-      </div>
-      <div class="press-card">
-        <div class="press-source">Udacity</div>
-        <div class="press-quote" data-en="&lt;span class='accent'&gt;AI Product Manager&lt;/span&gt; Nanodegree graduate" data-ar="خريج برنامج &lt;span class='accent'&gt;مدير منتجات الذكاء الاصطناعي&lt;/span&gt;"><span class="accent">AI Product Manager</span> Nanodegree graduate</div>
-        <div class="press-detail" data-en="Completed October 2025" data-ar="أنجزت في أكتوبر ٢٠٢٥">Completed October 2025</div>
-      </div>
-      <div class="press-card">
-        <div class="press-source" data-en="Saudi Council of Engineers" data-ar="هيئة المهندسين السعودية">Saudi Council of Engineers</div>
-        <div class="press-quote" data-en="Licensed &lt;span class='accent'&gt;engineering&lt;/span&gt; professional" data-ar="مرخّص كمهندس &lt;span class='accent'&gt;محترف معتمد&lt;/span&gt;">Licensed <span class="accent">engineering</span> professional</div>
-        <div class="press-detail" data-en="Registration # 1009232" data-ar="رقم التسجيل ١٠٠٩٢٣٢">Registration # 1009232</div>
-      </div>
-      <div class="press-card">
-        <div class="press-source" data-en="University of Hafr Al-Batin" data-ar="جامعة حفر الباطن">University of Hafr Al-Batin</div>
-        <div class="press-quote" data-en="Graduating &lt;span class='accent'&gt;2nd&lt;/span&gt; in the Computer Science &amp; Engineering cohort" data-ar="متخرج بالمرتبة &lt;span class='accent'&gt;الثانية&lt;/span&gt; على دفعة علوم وهندسة الحاسب">Graduating <span class="accent">2nd</span> in the Computer Science &amp; Engineering cohort</div>
-        <div class="press-detail" data-en="Class of 2026" data-ar="دفعة ٢٠٢٦">Class of 2026</div>
-      </div>
-      <div class="press-card">
-        <div class="press-source" data-en="SDAIA · Tuwaiq · Huawei" data-ar="سدايا · طويق · هواوي">SDAIA · Tuwaiq · Huawei</div>
-        <div class="press-quote" data-en="Trained across <span class='accent'>AI, Cloud &amp; Cybersecurity</span>" data-ar="مُدرَّب في <span class='accent'>الذكاء الاصطناعي والحوسبة السحابية والأمن السيبراني</span>">Trained across <span class="accent">AI, Cloud &amp; Cybersecurity</span></div>
-        <div class="press-detail" data-en="National academies &amp; global programs" data-ar="أكاديميات وطنية وبرامج عالمية">National academies &amp; global programs</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REQUEST ON DEMAND (replaces old Files section) -->
-<section class="section reveal" id="request">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-number" data-en="11 / The Archive" data-ar="١١ / الأرشيف">11 / The Archive</div>
-      <h2 class="section-title" data-en="Want to &lt;span class='italic'&gt;dig deeper&lt;/span&gt;? Request it." data-ar="هل تُريد أن &lt;span class='italic'&gt;تتعمّق أكثر&lt;/span&gt;؟ اطلبها.">Want to <span class="italic">dig deeper</span>? Request it.</h2>
-    </div>
-
-    <p class="request-intro" data-en="My full deliverables — reports, decks, and documentation — are shared &lt;em&gt;on request only&lt;/em&gt;. This isn't a public dropbox; it's a conversation. Tap any card below to send me a pre-filled email, and I'll follow up personally within 24 hours." data-ar="مُخرجاتي الكاملة — التّقارير والعروض والوثائق — تُشارَك &lt;em&gt;عند الطّلب فقط&lt;/em&gt;. ليست هذه أرشيفاً عامّاً، بل بدايةَ محادثة. انقر على أيّ بطاقةٍ أدناه لإرسال بريدٍ جاهز، وسأردّ عليك شخصيّاً خلال ٢٤ ساعة.">My full deliverables — reports, decks, and documentation — are shared <em>on request only</em>. This isn't a public dropbox; it's a conversation. Tap any card below to send me a pre-filled email, and I'll follow up personally within 24 hours.</p>
-
-    <div class="request-grid">
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20Full%20CV&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27d%20like%20to%20request%20your%20full%20CV.%0A%0AName%3A%20%0ACompany%2FRole%3A%20%0AReason%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Resume" data-ar="سيرة ذاتية">Resume</span>
-          <span>.docx</span>
-        </div>
-        <h3 class="request-title" data-en="The Full &lt;span class='italic'&gt;CV&lt;/span&gt;" data-ar="&lt;span class='italic'&gt;السيرة&lt;/span&gt; الذاتية الكاملة">The Full <span class="italic">CV</span></h3>
-        <p class="request-desc" data-en="Complete professional resume — experience, skills, certifications, and projects. Updated for 2026." data-ar="السّيرة الذّاتيّة المهنيّة الكاملة — الخبرات، والمهارات، والشّهادات، والمشاريع. مُحدَّثة لعام ٢٠٢٦.">Complete professional resume — experience, skills, certifications, and projects. Updated for 2026.</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبها">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20HumeX%20Proposal%20(CSEN%200242)&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27d%20like%20to%20request%20the%20HumeX%20Digital%20Transformation%20proposal.%0A%0AName%3A%20%0AContext%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Report" data-ar="تقرير">Report</span>
-          <span>CSEN 0242</span>
-        </div>
-        <h3 class="request-title" data-en="HumeX &lt;span class='italic'&gt;— Full Proposal&lt;/span&gt;" data-ar="HumeX &lt;span class='italic'&gt;— المقترح الكامل&lt;/span&gt;">HumeX <span class="italic">— Full Proposal</span></h3>
-        <p class="request-desc" data-en="Digital Transformation pilot for University of Hafr Al-Batin — AI-powered crowd flow analytics with live dashboards, heatmaps, and threshold alerts." data-ar="تجربةُ تحوّلٍ رقميٍّ لجامعة حفر الباطن — تحليل تدفّق الحشود بالذّكاء الاصطناعيّ، مع لوحات تحكّمٍ لحظيّة، وخرائط حراريّة، وتنبيهات عتبات.">Digital Transformation pilot for University of Hafr Al-Batin — AI-powered crowd flow analytics with live dashboards, heatmaps, and threshold alerts.</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبه">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20RAG%20Research%20Survey%20(CSEN%204302)&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27d%20like%20to%20request%20the%20full%20RAG%20research%20report.%0A%0AName%3A%20%0APurpose%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Research" data-ar="بحث">Research</span>
-          <span>CSEN 4302</span>
-        </div>
-        <h3 class="request-title" data-en="RAG Survey &lt;span class='italic'&gt;— Research Report&lt;/span&gt;" data-ar="دراسة RAG &lt;span class='italic'&gt;— التقرير البحثي&lt;/span&gt;">RAG Survey <span class="italic">— Research Report</span></h3>
-        <p class="request-desc" data-en="AI course project — comparative analysis of three landmark Retrieval-Augmented Generation papers (Lewis 2020, Self-RAG 2024, Gao Survey). Led a 6-member team." data-ar="مشروع مُقرّر الذّكاء الاصطناعيّ — تحليلٌ مُقارنٌ لثلاث أوراقٍ بحثيّة محوريّة في التّوليد المُعزَّز بالاسترجاع. قدتُ فريقاً من ستّة أعضاء.">AI course project — comparative analysis of three landmark Retrieval-Augmented Generation papers (Lewis 2020, Self-RAG 2024, Gao Survey). Led a 6-member team.</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبه">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20RAG%20Presentation%20Deck&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27d%20like%20to%20request%20the%20RAG%20research%20presentation%20slides.%0A%0AName%3A%20%0APurpose%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Presentation" data-ar="عرض تقديمي">Presentation</span>
-          <span>.pptx</span>
-        </div>
-        <h3 class="request-title" data-en="RAG Survey &lt;span class='italic'&gt;— Slide Deck&lt;/span&gt;" data-ar="دراسة RAG &lt;span class='italic'&gt;— العرض التقديمي&lt;/span&gt;">RAG Survey <span class="italic">— Slide Deck</span></h3>
-        <p class="request-desc" data-en="Presentation deck summarizing the RAG research project — the narrative, architecture diagrams, and conclusions delivered to the class." data-ar="عرضٌ تقديميٌّ يُلخّص مشروع بحث RAG — السّرد، ومُخطّطات البنية، والاستنتاجات الّتي قدّمتُها للصّفّ.">Presentation deck summarizing the RAG research project — the narrative, architecture diagrams, and conclusions delivered to the class.</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبه">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20University%20Project%20Portfolio&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27m%20interested%20in%20reviewing%20documentation%20for%20your%20other%20university%20projects.%0A%0AWhich%20projects%3A%20%0AName%3A%20%0AContext%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Portfolio" data-ar="أعمال">Portfolio</span>
-          <span data-en="Multiple" data-ar="متعدد">Multiple</span>
-        </div>
-        <h3 class="request-title" data-en="Other University &lt;span class='italic'&gt;Projects&lt;/span&gt;" data-ar="&lt;span class='italic'&gt;مشاريع&lt;/span&gt; جامعية أخرى">Other University <span class="italic">Projects</span></h3>
-        <p class="request-desc" data-en="Reports, code, and documentation for the remaining course projects — Databases, Networks, Software Engineering, Route Optimizer, Inventory System, and more." data-ar="تقاريرُ وأكوادٌ ووثائقُ بقيّة المشاريع الجامعيّة — قواعد البيانات، والشّبكات، وهندسة البرمجيّات، ومُحسِّن المسارات، ونظام المخزون، وغيرها.">Reports, code, and documentation for the remaining course projects — Databases, Networks, Software Engineering, Route Optimizer, Inventory System, and more.</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبها">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-
-      <a href="mailto:Abdulmalek.Alghamdi@outlook.com?subject=Request%3A%20Awards%20%26%20Certification%20Verification&amp;body=Hi%20Abdulmalek%2C%0A%0AI%27d%20like%20to%20see%20verification%20of%20your%20hackathon%20results%20and%2For%20certifications.%0A%0AWhich%20ones%3A%20%0AName%3A%20%0AContext%3A%20%0A%0AThanks%2C" class="request-card">
-        <div class="request-meta">
-          <span class="request-type" data-en="Credentials" data-ar="وثائق">Credentials</span>
-          <span data-en="Verify" data-ar="تحقق">Verify</span>
-        </div>
-        <h3 class="request-title" data-en="Awards &amp; &lt;span class='italic'&gt;Certificates&lt;/span&gt;" data-ar="الجوائز و&lt;span class='italic'&gt;الشهادات&lt;/span&gt;">Awards &amp; <span class="italic">Certificates</span></h3>
-        <p class="request-desc" data-en="Proof of hackathon placements (CyberThon 2nd, Tuwaiq Finalist, stc Stage 2) and full certification records (PMI, ITIL, Udacity, SDAIA, Tuwaiq, Huawei, etc.)." data-ar="إثباتات نتائج الهاكاثونات (سايبرثون: المركز الثّاني، طويق: نهائيّات، stc: المرحلة الثّانية)، والسّجلّ الكامل للشّهادات (PMI، و ITIL، و Udacity، وسدايا، وطويق، وهواوي، وغيرها).">Proof of hackathon placements (CyberThon 2nd, Tuwaiq Finalist, stc Stage 2) and full certification records (PMI, ITIL, Udacity, SDAIA, Tuwaiq, Huawei, etc.).</p>
-        <div class="request-cta">
-          <span class="request-cta-text" data-en="Tap to request" data-ar="انقر لطلبها">Tap to request</span>
-          <span class="request-arrow">→</span>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact reveal" id="contact">
-  <div class="container">
-    <div class="contact-label" data-en="12 / Let's talk" data-ar="١٢ / لنتحدّث">12 / Let's talk</div>
-    <h2 class="contact-title" data-en="Got a &lt;span class='italic'&gt;problem&lt;/span&gt; worth&lt;br&gt;analyzing?" data-ar="هل لديك &lt;span class='italic'&gt;مشكلةٌ&lt;/span&gt; تستحقّ&lt;br&gt;التّحليل؟">Got a <span class="italic">problem</span> worth<br>analyzing?</h2>
-    <a href="mailto:Abdulmalek.Alghamdi@outlook.com" class="contact-email">Abdulmalek.Alghamdi@outlook.com →</a>
-    <div class="contact-links">
-      <a href="https://linkedin.com/in/abdulmalek-alghamdi-csegr" target="_blank">LinkedIn</a>
-      <a href="https://github.com/AbdulmalekAlghamdi" target="_blank">GitHub</a>
-      <a href="tel:+966568728387">+966 56 872 8387</a>
-    </div>
-  </div>
-</section>
+</main>
 
 <footer>
-  <span data-en="© 2026 Abdulmalek Alghamdi" data-ar="© ٢٠٢٦ عبدالملك الغامدي">© 2026 Abdulmalek Alghamdi</span>
-  <span data-en="Designed with intent" data-ar="صُمِّمَ بقصدٍ ونيّة">Designed with intent</span>
+  <div>© 2026 · Mohammad Aldhafeeri · Built with code &amp; caffeine</div>
+  <div class="session">[ SESSION_ID: 0xA7F3-CB21 · ENCRYPTED ]</div>
 </footer>
 
 <script>
-  // LOADER
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // fire hero reveals immediately (already in viewport)
   window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
-    const counter = document.getElementById('loader-count');
-    let count = 0;
-    const interval = setInterval(() => {
-      count += Math.floor(Math.random() * 15) + 5;
-      if (count >= 100) {
-        count = 100;
-        clearInterval(interval);
-        setTimeout(() => loader.classList.add('done'), 400);
-      }
-      counter.textContent = String(count).padStart(2, '0');
-    }, 100);
+    document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('in'));
   });
-
-  // CURSOR
-  const cursor = document.querySelector('.cursor');
-  const follower = document.querySelector('.cursor-follower');
-  if (window.matchMedia('(hover: hover)').matches) {
-    let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      cursor.style.left = mouseX + 'px';
-      cursor.style.top = mouseY + 'px';
-    });
-    function animateFollower() {
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
-      follower.style.left = followerX + 'px';
-      follower.style.top = followerY + 'px';
-      requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
-    const hoverables = document.querySelectorAll('a, button, .metric, .uni-card, .cert-card, .press-card, .request-card, .capstone-meta-item, .arsenal-column, .arsenal-list li, .experience-item, .hack-item, .journey-row');
-    hoverables.forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
-  }
-
-  // SCROLL PROGRESS + NAV
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
-    progressBar.style.width = progress + '%';
-    const nav = document.getElementById('nav');
-    if (scrollTop > 50) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  });
-
-  // REVEAL ON SCROLL
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ANIMATED COUNTERS
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.dataset.target, 10);
-        const duration = 1600;
-        const start = performance.now();
-        function tick(now) {
-          const progress = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.floor(eased * target);
-          if (progress < 1) requestAnimationFrame(tick);
-          else el.textContent = target;
-        }
-        requestAnimationFrame(tick);
-        counterObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.count').forEach(el => counterObserver.observe(el));
-
-  // PARALLAX HERO
-  const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle && window.matchMedia('(hover: hover)').matches) {
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 12;
-      const y = (e.clientY / window.innerHeight - 0.5) * 12;
-      heroTitle.style.transform = `translate(${x}px, ${y}px)`;
-    });
-  }
-
-  // LANGUAGE SWITCH
-  const langBtns = document.querySelectorAll('.lang-btn');
-  const body = document.body;
-  const html = document.documentElement;
-  function setLanguage(lang) {
-    if (lang === 'ar') {
-      body.classList.add('ar'); body.classList.remove('en');
-      html.setAttribute('dir', 'rtl'); html.setAttribute('lang', 'ar');
-    } else {
-      body.classList.add('en'); body.classList.remove('ar');
-      html.setAttribute('dir', 'ltr'); html.setAttribute('lang', 'en');
-    }
-    langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-    document.querySelectorAll('[data-en]').forEach(el => {
-      const content = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-      if (content !== null) el.innerHTML = content;
-    });
-    try { localStorage.setItem('pref-lang', lang); } catch(e) {}
-  }
-  langBtns.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-  try {
-    const saved = localStorage.getItem('pref-lang');
-    if (saved === 'ar') setLanguage('ar');
-  } catch(e) {}
 </script>
 
 </body>
